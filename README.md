@@ -1,4 +1,16 @@
-Tables:
+# TODO
+
+- [ ] Frontend
+  - [ ] Navbar
+  - [ ] Base
+  - [ ] Footer
+  - [ ] Search page
+  - [ ] Add entry page
+- [ ] Models
+- [ ] Profiles
+- [ ] Tests
+
+# Tables:
 
 ENTRY
 - id

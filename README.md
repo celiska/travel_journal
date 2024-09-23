@@ -42,3 +42,8 @@ TRANSPORT
 WEATHER
 - id
 - type
+
+IMAGE
+- id
+- image
+- description

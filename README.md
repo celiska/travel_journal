@@ -1,12 +1,12 @@
 # TODO
 
 - [ ] Frontend
-  - [ ] Navbar
-  - [ ] Base
-  - [ ] Footer
+  - [x] Navbar
+  - [x] Base
+  - [x] Footer
   - [ ] Search page
   - [ ] Add entry page
-- [ ] Models
+- [x] Models
 - [ ] Profiles
 - [ ] Tests
 
@@ -42,3 +42,8 @@ TRANSPORT
 WEATHER
 - id
 - type
+
+IMAGE
+- id
+- image
+- description

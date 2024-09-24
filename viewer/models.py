@@ -94,3 +94,14 @@ class Entry(models.Model):
         if self.arrival_date and self.departure_date:
             duration = self.arrival_date - self.departure_date
             return duration.days
+
+class Image(models.Model):
+    image = models.ImageField(upload_to="images/", null=False, blank=False)
+    description = models.TextField(null=True, blank=True)
+    entry = models.ForeignKey(Entry, on_delete=models.CASCADE, null=False, blank=False)
+
+    def __str__(self):
+        return self.image.name
+
+    def __repr__(self):
+        return f"Image(image={self.image})"

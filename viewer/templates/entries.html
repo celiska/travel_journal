@@ -45,10 +45,29 @@
         </form>
     </div>
 <hr/>
-    <!-- Trips Column -->
-    <div class="container bg-white p-4 mt-4 border rounded shadow-sm">
-        <h3 class="text-secondary">Trips</h3>
-        <!-- Tady bude obsah s výpisem cest -->
+<!-- Trips Column -->
+<div class="container bg-white p-4 mt-4 border rounded shadow-sm">
+    <h3 class="text-secondary">Trips</h3>
+    <div class="row">
+        {% for entry in entries %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ entry.entry_name }}</h5>
+                        {% for image in entry.image_set.all %}
+                            <img src="{{ image.image.url }}" alt="Image for {{ entry.entry_name }}" class="img-fluid mb-2">
+                        {% endfor %}
+
+                        {% if entry.description|length > 400 %}
+                            <p class="card-text">{{ entry.description|slice:":400" }}... <a href="#">Read more</a></p>
+                        {% else %}
+                            <p class="card-text">{{ entry.description }}</p>
+                        {% endif %}
+                        <a href="#" class="btn btn-primary">View Trip</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
     </div>
 </div>
 

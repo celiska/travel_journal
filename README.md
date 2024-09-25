@@ -5,11 +5,11 @@
   - [x] Base
   - [x] Footer
   - [ ] Search page
-    - [ ] Filtering for weather
-    - [ ] cost & currency
+    - [x] Filtering for weather
+    - [x] cost & currency
     - [ ] Hashtags
     - [x] Places
-    - [ ] Transport
+    - [x] Transport
 - [ ] Add entry page
 - [x] Models
 - [ ] Profiles

@@ -7,6 +7,26 @@
 <form method="GET" action="" class="mt-4">
     <div class="form-row">
         <div class="form-group col-md-4">
+            <label for="country">Country</label>
+            <select name="country" id="country" class="form-control">
+                <option value="">-- Choose a country --</option>
+                {% for country in countries %}
+                    <option value="{{ country }}">{{ country }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group col-md-4">
+            <label for="place">Place</label>
+            <select name="place" id="place" class="form-control">
+                <option value="">-- Choose a place --</option>
+                {% for place in places %}
+                    <option value="{{ place }}">{{ place }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group col-md-4">
             <label for="arrival_date">Arrival date</label>
             <input type="date" name="arrival_date" class="form-control">
         </div>
@@ -20,7 +40,7 @@
     <div class="form-group">
         <label for="rating">Rating</label>
         <select name="rating" class="form-control">
-            <option value="">-- Vyberte hodnocení --</option>
+            <option value="">-- Choose rating --</option>
             <option value="1">⭐</option>
             <option value="2">⭐⭐</option>
             <option value="3">⭐⭐⭐</option>
@@ -31,7 +51,6 @@
 
     <button type="submit" class="btn btn-primary btn-block">Filter</button>
 </form>
-
 
 <hr/>
 
@@ -46,14 +65,25 @@
                     <div class="card h-100">
                         <div class="card-body">
                             <h5 class="card-title">{{ entry.entry_name }}</h5>
-                            <p class="card-text">{{ entry.description|slice:":100" }}...</p>
+                            <p class="card-text">{{ entry.description|slice:":300" }}...</p>
+                            <p>
+                                {% for i in "12345" %}
+                                    {% if i|add:"0" <= entry.rating %}
+                                        <span>⭐</span>
+                                    {% else %}
+                                        <span>✩</span>
+                                    {% endif %}
+                                {% endfor %}
+                            </p>
                             <a href="#" class="btn btn-primary">View Trip</a>
                         </div>
                     </div>
                 </div>
             {% endfor %}
         {% else %}
-            <p>No trips found matching your criteria.</p>
+             <div class="alert alert-info text-center col-12 mb-4" role="alert">
+                 ❗ No results found
+            </div>
         {% endif %}
     </div>
 </div>

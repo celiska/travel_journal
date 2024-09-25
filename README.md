@@ -5,7 +5,12 @@
   - [x] Base
   - [x] Footer
   - [ ] Search page
-  - [ ] Add entry page
+    - [ ] Filtering for weather
+    - [ ] cost & currency
+    - [ ] Hashtags
+    - [x] Places
+    - [ ] Transport
+- [ ] Add entry page
 - [x] Models
 - [ ] Profiles
 - [ ] Tests

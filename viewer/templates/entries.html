@@ -4,70 +4,57 @@
 
 <h1 class="display-4">Popular trips</h1>
 
-<div class="row">
-    <!-- Filters Column -->
-    <div class="container border rounded shadow-sm">
-        <h3 class="text-secondary filter">Filters</h3>
+<form method="GET" action="" class="mt-4">
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="arrival_date">Arrival date</label>
+            <input type="date" name="arrival_date" class="form-control">
+        </div>
 
-        <!-- Filtrační formulář uvnitř boxu -->
-        <form method="GET" action="" class="mt-4">
-            <div class="form-row">
-                <div class="form-group col-md-4">
-                    <label for="destination">Country</label>
-                    <input type="text" class="form-control" id="destination" name="destination" placeholder="Enter destination">
-                </div>
-
-                <div class="form-group col-md-4">
-                    <label for="arrival_date">Arrival date</label>
-                    <input type="date" class="form-control" id="arrival_date" name="arrival_date">
-                </div>
-
-                <div class="form-group col-md-4">
-                    <label for="departure_date">Departure date</label>
-                    <input type="date" class="form-control" id="departure_date" name="departure_date">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="category">Rating</label>
-                <select class="form-control" id="category" name="category">
-                    <option value="">Choose...</option>
-                    <option value="1-star">⭐</option>
-                    <option value="2-stars">⭐⭐</option>
-                    <option value="3-stars">⭐⭐⭐</option>
-                    <option value="4-stars">⭐⭐⭐⭐</option>
-                    <option value="5-stars">⭐⭐⭐⭐⭐</option>
-
-                </select>
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-block">Filter</button>
-        </form>
+        <div class="form-group col-md-4">
+            <label for="departure_date">Departure date</label>
+            <input type="date" name="departure_date" class="form-control">
+        </div>
     </div>
+
+    <div class="form-group">
+        <label for="rating">Rating</label>
+        <select name="rating" class="form-control">
+            <option value="">-- Vyberte hodnocení --</option>
+            <option value="1">⭐</option>
+            <option value="2">⭐⭐</option>
+            <option value="3">⭐⭐⭐</option>
+            <option value="4">⭐⭐⭐⭐</option>
+            <option value="5">⭐⭐⭐⭐⭐</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-block">Filter</button>
+</form>
+
+
 <hr/>
-<!-- Trips Column -->
+
+<!-- Výsledky filtrování -->
 <div class="container bg-white p-4 mt-4 border rounded shadow-sm">
     <h3 class="text-secondary">Trips</h3>
-    <div class="row">
-        {% for entry in entries %}
-            <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ entry.entry_name }}</h5>
-                        {% for image in entry.image_set.all %}
-                            <img src="{{ image.image.url }}" alt="Image for {{ entry.entry_name }}" class="img-fluid mb-2">
-                        {% endfor %}
 
-                        {% if entry.description|length > 400 %}
-                            <p class="card-text">{{ entry.description|slice:":400" }}... <a href="#">Read more</a></p>
-                        {% else %}
-                            <p class="card-text">{{ entry.description }}</p>
-                        {% endif %}
-                        <a href="#" class="btn btn-primary">View Trip</a>
+    <div class="row">
+        {% if entries %}
+            {% for entry in entries %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ entry.entry_name }}</h5>
+                            <p class="card-text">{{ entry.description|slice:":100" }}...</p>
+                            <a href="#" class="btn btn-primary">View Trip</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        {% else %}
+            <p>No trips found matching your criteria.</p>
+        {% endif %}
     </div>
 </div>
 

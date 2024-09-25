@@ -19,12 +19,12 @@ from django.contrib import admin
 from django.urls import path
 
 from travel_journal import settings
-from viewer.views import home, EntriesList
+from viewer.views import home, EntriesList, entry_filtered_list
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
 
     path('', home, name='home'),
 
-    path('entries/', EntriesList.as_view(), name='entries' ),
+    path('entries/', entry_filtered_list, name='entries'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -15,19 +15,19 @@ class Country(models.Model):
     def __repr__(self):
         return f"Country(country={self.country}, code={self.code})"
 
-class City(models.Model):
-    city = models.CharField(max_length=100, null=False, blank=False)
+class Place(models.Model):
+    place = models.CharField(max_length=100, null=False, blank=False)
     country = models.ForeignKey(Country, on_delete=models.CASCADE, null=False, blank=False)
 
     class Meta:
-        verbose_name_plural = "Cities"
-        ordering = ["city"]
+        verbose_name_plural = "Places"
+        ordering = ["place"]
 
     def __str__(self):
-        return self.city
+        return self.place
 
     def __repr__(self):
-        return f"City(city={self.city})"
+        return f"Place(place={self.place})"
 
 class Transport(models.Model):
     type = models.CharField(max_length=100, null=False, blank=False)
@@ -66,16 +66,26 @@ class Hashtag(models.Model):
     def __repr__(self):
         return f"Hashtag(hashtag={self.hashtag})"
 
+CURRENCY_CHOICES = (
+    ("AUD", "Australian dollar (AUD)"),
+    ("CNY", "Chinese yuan (CNY)"),
+    ("CZK", "Czech koruna (CZK)"),
+    ("EUR", "Euro (EUR)"),
+    ("GBP", "Pound sterling (GBP)"),
+    ("USD", "U.S. dollar (USD)")
+)
+
 class Entry(models.Model):
     entry_name = models.CharField(max_length=100, null=False, blank=False)
     description = models.TextField(null=False, blank=False)
     country = models.ManyToManyField(Country, blank=False)
-    City = models.ManyToManyField(City, blank=False)
+    place = models.ManyToManyField(Place, blank=False)
     arrival_date = models.DateField(null=False, blank=False)
     departure_date = models.DateField(null=True, blank=True)
     stayed_for = models.IntegerField(null=True, blank=True)
     transport = models.ManyToManyField(Transport, blank=False)
     cost = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, default="USD", null=True, blank=True)
     weather = models.ManyToManyField(Weather, blank=False)
     rating = models.IntegerField(default=0, null=False, blank=False)
     hashtag = models.ManyToManyField(Hashtag, blank=True)

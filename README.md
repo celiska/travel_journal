@@ -4,16 +4,21 @@
   - [x] Navbar
   - [x] Base
   - [x] Footer
-  - [ ] Search page
+  - [x] Search page
     - [x] Filtering for weather
     - [x] cost & currency
-    - [ ] Hashtags
+    - [x] Hashtags
     - [x] Places
     - [x] Transport
-- [ ] Add entry page
+- [x] Add entry page
+- [ ] Add proper form validation 
+- [x] Entry detail view
 - [x] Models
 - [ ] Profiles
 - [ ] Tests
+- [ ] Separate JavaScript codes into static files
+
+
 
 # Tables:
 

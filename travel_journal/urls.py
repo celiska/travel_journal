@@ -19,7 +19,8 @@ from django.contrib import admin
 from django.urls import path
 
 from travel_journal import settings
-from viewer.views import home, EntriesList, entry_list
+from viewer import views
+from viewer.views import home, EntriesList, entry_list, EntryCreateView, EntryDetailView
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
@@ -27,5 +28,7 @@ urlpatterns = [
     path('', home, name='home'),
 
     path('entries/', entry_list, name='entries'),
+    path('entries/create', EntryCreateView.as_view(), name='entry_create'),
+    path('entry/<pk>', EntryDetailView.as_view(), name='entry'),
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

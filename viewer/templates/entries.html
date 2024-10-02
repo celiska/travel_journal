@@ -47,70 +47,78 @@
             </select>
         </div>
 
-    <div class="form-group col-md-3">
-        <label for="customRange2" class="form-label">Cost</label>
-        <input
-            type="range"
-            name="cost"
-            class="form-control-range"
-            min="0"
-            max="{{ max_cost }}"
-            value="{{ selected_cost }}"
-            id="customRange2"
-            oninput="document.getElementById('rangeValue').innerText = this.value"
-        >
-        <div class="d-flex justify-content-between">
-            <span>0</span>
-            <span id="rangeValue">{{ selected_cost }}</span>
-            <span>{{ max_cost }}</span>
+        <div class="form-group col-md-3">
+            <label for="customRange2" class="form-label">Cost</label>
+            <input
+                type="range"
+                name="cost"
+                class="form-control-range"
+                min="0"
+                max="{{ max_cost }}"
+                value="{{ selected_cost }}"
+                id="customRange2"
+                oninput="document.getElementById('rangeValue').innerText = this.value"
+            >
+            <div class="d-flex justify-content-between">
+                <span>0</span>
+                <span id="rangeValue">{{ selected_cost }}</span>
+                <span>{{ max_cost }}</span>
+            </div>
         </div>
-    </div>
 
-    <div class="form-group col-md-1 mt-4">
-        <select name="currency" id="currency" class="form-control">
-            {% for currency in currencies %}
-                <option value="{{ currency }}">{{ currency }}</option>
-            {% endfor %}
-        </select>
-    </div>
-    <div class="form-group col-md-2 ml-4">
-        <label>Weather</label>
-        <div>
-            <span><input type="checkbox" name="weather" value="overcast"><i class="fa-solid fa-cloud" title="Overcast"></i></span>
-            <span><input type="checkbox" name="weather" value="rain"><i class="fa-solid fa-cloud-rain" title="Rain"></i></span>
-            <span><input type="checkbox" name="weather" value="sun"><i class="fa-solid fa-sun" title="Sun"></i></span>
-            <span><input type="checkbox" name="weather" value="storm"><i class="fa-solid fa-bolt" title="Storm"></i></span>
-            <span><input type="checkbox" name="weather" value="wind"><i class="fa-solid fa-wind" title="Wind"></i></span>
-            <span><input type="checkbox" name="weather" value="snow"><i class="fa-solid fa-snowflake" title="Snow"></i></span>
-            <span><input type="checkbox" name="weather" value="fog"><i class="fa-solid fa-smog" title="Fog"></i></span>
-            <span><input type="checkbox" name="weather" value="hail"><i class="fa-solid fa-cloud-meatball" title="Hail"></i></span>
-            <span><input type="checkbox" name="weather" value="chill"><i class="fa-solid fa-temperature-low" title="Chill"></i></span>
-            <span><input type="checkbox" name="weather" value="hot"><i class="fa-solid fa-temperature-high" title="Hot"></i></span>
+        <div class="form-group col-md-1 mt-4">
+            <select name="currency" id="currency" class="form-control">
+                {% for currency in currencies %}
+                    <option value="{{ currency }}">{{ currency }}</option>
+                {% endfor %}
+            </select>
         </div>
-    </div>
 
-    <div class="form-group col-md-3">
-        <label>Transport</label>
-        <div>
-            <span><input type="checkbox" name="transport" value="plane"><i class="fa-solid fa-plane" title="Plane"></i></span>
-            <span><input type="checkbox" name="transport" value="train"><i class="fa-solid fa-train" title="Train"></i></span>
-            <span><input type="checkbox" name="transport" value="metro"><i class="fa-solid fa-train-subway" title="Metro"></i></span>
-            <span><input type="checkbox" name="transport" value="tram"><i class="fa-solid fa-train-tram" title="Tram"></i></span>
-            <span><input type="checkbox" name="transport" value="car"><i class="fa-solid fa-car" title="Car"></i></span>
-            <span><input type="checkbox" name="transport" value="bus"><i class="fa-solid fa-bus" title="Bus"></i></span><br>
-            <span><input type="checkbox" name="transport" value="cable_car"><i class="fa-solid fa-cable-car" title="Cable car"></i></span>
-            <span><input type="checkbox" name="transport" value="on_foot"><i class="fa-solid fa-person-walking" title="On foot"></i></span>
-            <span><input type="checkbox" name="transport" value="boat"><i class="fa-solid fa-sailboat" title="Boat"></i></span>
-            <span><input type="checkbox" name="transport" value="bicycle"><i class="fa-solid fa-bicycle" title="Bicycle"></i></span>
-            <span><input type="checkbox" name="transport" value="motorcycle"><i class="fa-solid fa-motorcycle" title="Motorcycle"></i></span>
-            <span><input type="checkbox" name="transport" value="horse"><i class="fa-solid fa-horse" title="Horse"></i></span>
+        <div class="form-group col-md-2 ml-4">
+            <label>Weather</label>
+            <div>
+                <span><input type="checkbox" name="weather" value="overcast"><i class="fa-solid fa-cloud" title="Overcast"></i></span>
+                <span><input type="checkbox" name="weather" value="rain"><i class="fa-solid fa-cloud-rain" title="Rain"></i></span>
+                <span><input type="checkbox" name="weather" value="sun"><i class="fa-solid fa-sun" title="Sun"></i></span>
+                <span><input type="checkbox" name="weather" value="storm"><i class="fa-solid fa-bolt" title="Storm"></i></span>
+                <span><input type="checkbox" name="weather" value="wind"><i class="fa-solid fa-wind" title="Wind"></i></span>
+                <span><input type="checkbox" name="weather" value="snow"><i class="fa-solid fa-snowflake" title="Snow"></i></span>
+                <span><input type="checkbox" name="weather" value="fog"><i class="fa-solid fa-smog" title="Fog"></i></span>
+                <span><input type="checkbox" name="weather" value="hail"><i class="fa-solid fa-cloud-meatball" title="Hail"></i></span>
+                <span><input type="checkbox" name="weather" value="chill"><i class="fa-solid fa-temperature-low" title="Chill"></i></span>
+                <span><input type="checkbox" name="weather" value="hot"><i class="fa-solid fa-temperature-high" title="Hot"></i></span>
+            </div>
         </div>
-    </div>
 
-    <div class="form-group col-md-2">
-        <label>Hashtag</label>
-        <input type="text" id="hashtagInput" placeholder="Search for hashtag">
-        <!-- TODO: Správně nalinkovat statické soubory (hashtags.js) -->
+        <div class="form-group col-md-3">
+            <label>Transport</label>
+            <div>
+                <span><input type="checkbox" name="transport" value="plane"><i class="fa-solid fa-plane" title="Plane"></i></span>
+                <span><input type="checkbox" name="transport" value="train"><i class="fa-solid fa-train" title="Train"></i></span>
+                <span><input type="checkbox" name="transport" value="metro"><i class="fa-solid fa-train-subway" title="Metro"></i></span>
+                <span><input type="checkbox" name="transport" value="tram"><i class="fa-solid fa-train-tram" title="Tram"></i></span>
+                <span><input type="checkbox" name="transport" value="car"><i class="fa-solid fa-car" title="Car"></i></span>
+                <span><input type="checkbox" name="transport" value="bus"><i class="fa-solid fa-bus" title="Bus"></i></span><br>
+                <span><input type="checkbox" name="transport" value="cable_car"><i class="fa-solid fa-cable-car" title="Cable car"></i></span>
+                <span><input type="checkbox" name="transport" value="on_foot"><i class="fa-solid fa-person-walking" title="On foot"></i></span>
+                <span><input type="checkbox" name="transport" value="boat"><i class="fa-solid fa-sailboat" title="Boat"></i></span>
+                <span><input type="checkbox" name="transport" value="bicycle"><i class="fa-solid fa-bicycle" title="Bicycle"></i></span>
+                <span><input type="checkbox" name="transport" value="motorcycle"><i class="fa-solid fa-motorcycle" title="Motorcycle"></i></span>
+                <span><input type="checkbox" name="transport" value="horse"><i class="fa-solid fa-horse" title="Horse"></i></span>
+            </div>
+        </div>
+
+        <!-- Hashtag Filtering -->
+        <div class="form-group col-md-2">
+            <label>Hashtags</label>
+            <div class="input-group mb-3">
+                <input type="text" id="hashtag-input" class="form-control" placeholder="Enter hashtag">
+                <button type="button" class="btn btn-secondary" id="add-hashtag-btn">Add</button>
+            </div>
+
+            <div id="hashtag-list" class="mt-2"></div>
+            <input type="hidden" name="hashtags" id="hashtags-hidden">
+        </div>
     </div>
 
     <button type="submit" class="btn btn-primary btn-block">Filter</button>
@@ -131,13 +139,13 @@
                             <p>
                                 {% for i in "12345" %}
                                     {% if i|add:"0" <= entry.rating %}
-                                        <span>⭐</span>
+                                        <span><i class="fa-solid fa-star" style="color: #FFD43B;"></i></span>
                                     {% else %}
-                                        <span>✩</span>
+                                        <span><i class="fa-regular fa-star" style="color: #FFD43B;"></i></span>
                                     {% endif %}
                                 {% endfor %}
                             </p>
-                            <a href="#" class="btn btn-primary">View Trip</a>
+                            <a href="{% url 'entry' entry.pk %}" class="btn btn-primary">View Trip</a>
                         </div>
                     </div>
                 </div>
@@ -149,5 +157,34 @@
         {% endif %}
     </div>
 </div>
+
+<script>
+    // List to hold added hashtags
+    let hashtags = [];
+
+    // Function to add a hashtag
+    document.getElementById('add-hashtag-btn').addEventListener('click', function() {
+        const hashtagInput = document.getElementById('hashtag-input');
+        const hashtagValue = hashtagInput.value.trim();
+
+        // Check if hashtag is not empty and not already added
+        if (hashtagValue && !hashtags.includes(hashtagValue)) {
+            hashtags.push(hashtagValue); // Add hashtag to the list
+
+            // Update hidden input field for GET request
+            document.getElementById('hashtags-hidden').value = hashtags.join(',');
+
+            // Visually add hashtag
+            const hashtagList = document.getElementById('hashtag-list');
+            const hashtagItem = document.createElement('span');
+            hashtagItem.classList.add('badge', 'bg-secondary', 'mr-2', 'mb-2');
+            hashtagItem.textContent = '#' + hashtagValue;
+            hashtagList.appendChild(hashtagItem);
+
+            // Clear input field
+            hashtagInput.value = '';
+        }
+    });
+</script>
 
 {% endblock %}

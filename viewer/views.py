@@ -1,9 +1,10 @@
 from django.db.models import Max
 from django.shortcuts import render
-from django.views.generic import ListView
+from django.urls import reverse_lazy
+from django.views.generic import ListView, CreateView, DetailView
 
-from viewer.models import Entry, Country, Weather
-
+from viewer.forms import EntryCreateForm
+from viewer.models import Entry, Country, Weather, Place, Hashtag
 
 def home(request):
     return render(request, "home.html")
@@ -13,9 +14,14 @@ class EntriesList(ListView):
     model = Entry
     context_object_name = 'entries'
 
+def get_countries_and_places():
+    countries = Country.objects.all()
+    places = Place.objects.all()
+    return countries, places
 
 def entry_list(request):
     entries = Entry.objects.all()
+
     countries = Entry.objects.values_list('country__country', flat=True).distinct()
     places = Entry.objects.values_list('place__place', flat=True).distinct()
     max_cost = entries.aggregate(Max('cost'))['cost__max'] or 0
@@ -50,6 +56,10 @@ def entry_list(request):
     if selected_transport:
         entries = entries.filter(transport__type__in=selected_transport)
 
+    hashtags_str = request.GET.get('hashtags')
+    if hashtags_str:
+        hashtags = hashtags_str.split(',')
+        entries = entries.filter(hashtag__hashtag__in=hashtags).distinct()
 
     return render(request, 'entries.html', {
         'entries': entries,
@@ -59,3 +69,16 @@ def entry_list(request):
         'selected_cost': selected_cost,
         'currencies': list(currencies),
     })
+
+class EntryCreateView(CreateView):
+    template_name = 'entry_form.html'
+    form_class = EntryCreateForm
+    success_url = reverse_lazy('entries')
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+class EntryDetailView(DetailView):
+    template_name = 'entry.html'
+    model = Entry
+    context_object_name = 'entry'

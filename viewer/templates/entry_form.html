@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="text-center mb-4">Create New Entry</h2>
+    {% if form.errors %}
+    <div class="alert alert-danger">
+        <ul>
+        {% for field in form %}
+            {% for error in field.errors %}
+                <li>{{ field.label }}: {{ error }}</li>
+            {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="id_entry_name" class="form-label font-weight-bold">Entry Name</label>
+            <input type="text" name="entry_name" id="id_entry_name" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="id_description" class="form-label font-weight-bold">Description</label>
+            <textarea name="description" id="id_description" class="form-control" rows="4" required></textarea>
+        </div>
+
+        <div class="mb-3">
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="form-label font-weight-bold">Country</label>
+                    {{ form.country }}
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label font-weight-bold">Place</label>
+                    <input type="text" name="place" id="place" class="form-control" maxlength="100" required>
+                </div>
+            </div>
+        </div>
+
+        <!-- Arrival and Departure Date -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="id_arrival_date" class="form-label font-weight-bold">Arrival Date</label>
+                {{ form.arrival_date }}
+            </div>
+
+            <div class="col-md-6">
+                <label for="id_departure_date" class="form-label font-weight-bold">Departure Date</label>
+                {{ form.departure_date }}
+            </div>
+        </div>
+
+        <!-- Cost and Currency -->
+        <div class="mb-3">
+            <div class="row">
+                <div class="col-md-8">
+                    <label for="id_cost" class="form-label font-weight-bold">Cost</label>
+                    <div class="input-group">
+                        <input type="number" name="cost" id="id_cost" class="form-control" step="0.01" min="0">
+                        <span class="input-group-text">{{ form.currency }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transport and Weather -->
+        <div class="mb-3">
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="form-label font-weight-bold">Transport</label>
+                    <div class="card p-3 mt-2">
+                        <div class="row ml-1">
+                            {% for checkbox in form.transport %}
+                                <div class="col-6 form-check">
+                                    {{ checkbox.tag }}
+                                    {{ checkbox.choice_label }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label font-weight-bold">Weather</label>
+                    <div class="card p-3 mt-2">
+                        <div class="row ml-1">
+                            {% for checkbox in form.weather %}
+                                <div class="col-6 form-check">
+                                    {{ checkbox.tag }}
+                                    {{ checkbox.choice_label }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rating -->
+        <div class="mb-3">
+            <label class="form-label font-weight-bold">Rating</label>
+            <select name="rating" class="form-control">
+                <option value="">-- Choose rating --</option>
+                {% for i in "12345" %}
+                    <option value="{{ i }}">
+                        {% for j in "12345" %}
+                            {% if j <= i %}
+                                ⭐
+                            {% endif %}
+                        {% endfor %}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Hashtags -->
+        <div class="mb-3">
+            <label class="form-label font-weight-bold">Hashtags</label>
+
+            <div class="input-group mb-3">
+                <input type="text" id="hashtag-input" class="form-control" placeholder="Enter hashtag">
+                <button type="button" class="btn btn-secondary" id="add-hashtag-btn">Add</button>
+            </div>
+
+            <div id="hashtag-list" class="mt-2"></div>
+            <input type="hidden" name="hashtags" id="hashtags-hidden">
+        </div>
+
+        <!-- Submit button -->
+        <div class="text-center">
+            <input id="id_submit" type="submit" value="Save" class="btn btn-secondary">
+        </div>
+    </form>
+</div>
+
+<script>
+    // List to hold added hashtags
+    let hashtags = [];
+
+    // Function to add a hashtag
+    document.getElementById('add-hashtag-btn').addEventListener('click', function() {
+        const hashtagInput = document.getElementById('hashtag-input');
+        const hashtagValue = hashtagInput.value.trim();
+
+        // Check if the hashtag is not empty and not a duplicate
+        if (hashtagValue && !hashtags.includes(hashtagValue)) {
+            hashtags.push(hashtagValue); // Add hashtag to the list
+
+            // Update the hidden field for the POST request
+            document.getElementById('hashtags-hidden').value = hashtags.join(',');
+
+            // Visually add the hashtag
+            const hashtagList = document.getElementById('hashtag-list');
+            const hashtagItem = document.createElement('span');
+            hashtagItem.classList.add('badge', 'bg-secondary', 'mr-2', 'mb-2');
+            hashtagItem.textContent = '#' + hashtagValue;
+            hashtagList.appendChild(hashtagItem);
+
+            // Clear the input field
+            hashtagInput.value = '';
+        }
+    });
+</script>
+
+{% endblock %}

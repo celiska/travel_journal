@@ -19,8 +19,9 @@ from django.contrib import admin
 from django.urls import path, include
 
 from travel_journal import settings
-from viewer.views import home, EntriesList, entry_list
 from accounts.views import SignUpView, user_logout, profile_update, profile_view
+from viewer import views
+from viewer.views import home, EntriesList, entry_list, EntryCreateView, EntryDetailView
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
@@ -28,6 +29,8 @@ urlpatterns = [
     path('', home, name='home'),
 
     path('entries/', entry_list, name='entries'),
+    path('entries/create', EntryCreateView.as_view(), name='entry_create'),
+    path('entry/<pk>', EntryDetailView.as_view(), name='entry'),
 
     path('accounts/signup/', SignUpView.as_view(), name='signup'),
     path('accounts/logout/', user_logout, name='logout'),

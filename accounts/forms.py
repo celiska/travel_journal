@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.db.transaction import atomic
-from django.forms import CharField, Textarea
+from django.forms import CharField, Textarea, ModelForm
 
 from .models import Profile
 
@@ -8,7 +8,7 @@ class SignUpForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         fields = ["username", "password1", "password2"]
 
-    display_name = CharField()
+    display_name = CharField(max_length=20)
     bio = CharField(widget=Textarea(attrs={"class": "form-control"}),
                     max_length=500,
                     label="Write some info about yourself",
@@ -26,3 +26,13 @@ class SignUpForm(UserCreationForm):
             profile.save()
         return user
 
+class ProfileUpdateForm(ModelForm):
+    class Meta:
+        model = Profile
+        fields = ["display_name", "bio"]
+
+    display_name = CharField(max_length=20)
+    bio = CharField(widget=Textarea(attrs={"class": "form-control"}),
+                    max_length=500,
+                    label="Write some info about yourself",
+                    required=False)

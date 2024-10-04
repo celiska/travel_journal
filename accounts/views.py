@@ -2,10 +2,11 @@ from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
 from django.urls import reverse_lazy
 
-from .forms import SignUpForm
+from .forms import SignUpForm, ProfileUpdateForm
+from .models import Profile
 
 
 # Create your views here.
@@ -27,3 +28,17 @@ class SignUpView(CreateView):
 def user_logout(request):
     logout(request)
     return redirect(request.META.get('HTTP_REFERER', '/'))
+
+@login_required
+def profile_update(request):
+    if request.method == 'POST':
+        #T TODO: add user update form to change username and passwd
+        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+
+        if profile_form.is_valid():
+            profile_form.save()
+            return redirect(request.META.get('HTTP_REFERER', '/'))
+    else:
+        #user_form = UserUpdateForm(instance=request.user)
+        profile_form = ProfileUpdateForm(instance=request.user.profile)
+        return render(request, 'registration/update.html', {'profile_form': profile_form})

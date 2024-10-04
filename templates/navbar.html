@@ -14,12 +14,26 @@
         </li>
       </ul>
       <ul class="navbar-nav ml-auto">
+        {% if user.is_authenticated %}
         <li class="nav-item">
-          <a class="nav-link" href="#"><i class="bi bi-person"></i> Sign Up</a>
+          <i class="bi bi-person"></i> {{ user.username }}
+        </li>
+        {% comment "Uncomment after adding profile view" %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'profile' %}"><i class="bi bi-person"></i> Profile</a>
+        </li>
+        {% endcomment %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'logout' %}"><i class="bi bi-box-arrow-left"></i> Logout</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'signup' %}"><i class="bi bi-person"></i> Sign Up</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#"><i class="bi bi-box-arrow-in-right"></i> Login</a>
+          <a class="nav-link" href="{% url 'login' %}"><i class="bi bi-box-arrow-in-right"></i> Login</a>
         </li>
+        {% endif %}
       </ul>
     </div>
   </div>

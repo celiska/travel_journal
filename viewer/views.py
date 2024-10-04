@@ -36,6 +36,7 @@ def entry_list(request):
     selected_currency = request.GET.get('currency')
     selected_weather = request.GET.getlist('weather')
     selected_transport = request.GET.getlist('transport')
+    hashtags_str = request.GET.get('hashtags')
 
     if arrival_date:
         entries = entries.filter(arrival_date=arrival_date)
@@ -56,7 +57,6 @@ def entry_list(request):
     if selected_transport:
         entries = entries.filter(transport__type__in=selected_transport)
 
-    hashtags_str = request.GET.get('hashtags')
     if hashtags_str:
         hashtags = hashtags_str.split(',')
         entries = entries.filter(hashtag__hashtag__in=hashtags).distinct()
@@ -82,3 +82,15 @@ class EntryDetailView(DetailView):
     template_name = 'entry.html'
     model = Entry
     context_object_name = 'entry'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        entry = self.object
+
+        if entry.arrival_date and entry.departure_date:
+            duration = (entry.departure_date - entry.arrival_date).days
+        else:
+            duration = None
+
+        context['stayed_for'] = duration
+        return context

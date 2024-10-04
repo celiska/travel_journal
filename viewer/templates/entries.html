@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load static %}
+
 {% block content %}
 <h1 class="display-4">Popular trips</h1>
 
@@ -157,34 +159,6 @@
         {% endif %}
     </div>
 </div>
-
-<script>
-    // List to hold added hashtags
-    let hashtags = [];
-
-    // Function to add a hashtag
-    document.getElementById('add-hashtag-btn').addEventListener('click', function() {
-        const hashtagInput = document.getElementById('hashtag-input');
-        const hashtagValue = hashtagInput.value.trim();
-
-        // Check if hashtag is not empty and not already added
-        if (hashtagValue && !hashtags.includes(hashtagValue)) {
-            hashtags.push(hashtagValue); // Add hashtag to the list
-
-            // Update hidden input field for GET request
-            document.getElementById('hashtags-hidden').value = hashtags.join(',');
-
-            // Visually add hashtag
-            const hashtagList = document.getElementById('hashtag-list');
-            const hashtagItem = document.createElement('span');
-            hashtagItem.classList.add('badge', 'bg-secondary', 'mr-2', 'mb-2');
-            hashtagItem.textContent = '#' + hashtagValue;
-            hashtagList.appendChild(hashtagItem);
-
-            // Clear input field
-            hashtagInput.value = '';
-        }
-    });
-</script>
+<script src="{% static 'js/hashtags.js' %}"></script>
 
 {% endblock %}

@@ -3,7 +3,8 @@
 {% block content %}
 <form method="POST">
     {% csrf_token %}
+    <table>{{ user_form.as_table }}</table>
     <table>{{ profile_form.as_table }}</table>
-    <input id="id_submit" type="submit" value="Login" class="btn btn-primary">
+    <input id="id_submit" type="submit" value="Submit" class="btn btn-primary">
 </form>
 {% endblock %}

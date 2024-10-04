@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import CreateView, UpdateView
 from django.urls import reverse_lazy
 
-from .forms import SignUpForm, ProfileUpdateForm
+from .forms import SignUpForm, ProfileUpdateForm, UserUpdateForm
 from .models import Profile
 
 
@@ -33,16 +33,17 @@ def user_logout(request):
 @login_required
 def profile_update(request):
     if request.method == 'POST':
-        #T TODO: add user update form to change username and passwd
+        user_form = UserUpdateForm(request.POST, instance=request.user)
         profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
 
-        if profile_form.is_valid():
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
             profile_form.save()
             return redirect('profile', request.user.username)
     else:
-        #user_form = UserUpdateForm(instance=request.user)
+        user_form = UserUpdateForm(instance=request.user)
         profile_form = ProfileUpdateForm(instance=request.user.profile)
-        return render(request, 'registration/update.html', {'profile_form': profile_form})
+        return render(request, 'registration/update.html', {'user_form': user_form, 'profile_form': profile_form})
 
 def profile_view(request, username):
     user_account = User.objects.get(username=username)

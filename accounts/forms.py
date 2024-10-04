@@ -1,4 +1,5 @@
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from django.db.transaction import atomic
 from django.forms import CharField, Textarea, ModelForm
 
@@ -25,6 +26,13 @@ class SignUpForm(UserCreationForm):
         if commit:
             profile.save()
         return user
+
+class UserUpdateForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ["username"]
+
+    username = CharField(max_length=150, required=True)
 
 class ProfileUpdateForm(ModelForm):
     class Meta:

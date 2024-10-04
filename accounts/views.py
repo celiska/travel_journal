@@ -1,5 +1,6 @@
 from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView, UpdateView
@@ -37,8 +38,13 @@ def profile_update(request):
 
         if profile_form.is_valid():
             profile_form.save()
-            return redirect(request.META.get('HTTP_REFERER', '/'))
+            return redirect('profile', request.user.username)
     else:
         #user_form = UserUpdateForm(instance=request.user)
         profile_form = ProfileUpdateForm(instance=request.user.profile)
         return render(request, 'registration/update.html', {'profile_form': profile_form})
+
+def profile_view(request, username):
+    user_account = User.objects.get(username=username)
+    profile = Profile.objects.get(user__username=username)
+    return render(request, 'registration/profile.html', {'user_account': user_account, 'profile': profile})

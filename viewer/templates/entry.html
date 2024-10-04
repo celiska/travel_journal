@@ -34,6 +34,18 @@
 
                     <div class="row mb-3">
                         <div class="col-md-6">
+                            <h5><strong>Stayed For:</strong></h5>
+                            {% if stayed_for %}
+                                <p>{{ stayed_for }} days</p>
+                            {% else %}
+                                <p>Departure date not set</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
                             <h5><strong>Cost:</strong></h5>
                             <p>{{ entry.cost }} {{ entry.currency }}</p>
                         </div>
@@ -134,6 +146,24 @@
         </div>
         <div class="card-footer text-center">
             <a href="{% url 'entries' %}" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-12">
+        <h5><strong>Images:</strong></h5>
+        <div class="d-flex flex-wrap">
+            {% for image in entry.image_set.all %}
+                <div class="m-2">
+                    <img src="{{ image.image.url }}" alt="{{ image.description }}" class="img-fluid rounded" style="max-width: 150px; height: auto;">
+                    {% if image.description %}
+                        <p>{{ image.description }}</p>
+                    {% endif %}
+                </div>
+            {% empty %}
+                <p>No images available</p>
+            {% endfor %}
         </div>
     </div>
 </div>

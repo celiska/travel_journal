@@ -16,7 +16,7 @@
 - [x] Models
 - [ ] Profiles
 - [ ] Tests
-- [ ] Separate JavaScript codes into static files
+- [x] Separate JavaScript codes into static files
 
 
 

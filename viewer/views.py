@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Max
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -70,7 +71,7 @@ def entry_list(request):
         'currencies': list(currencies),
     })
 
-class EntryCreateView(CreateView):
+class EntryCreateView(LoginRequiredMixin, CreateView):
     template_name = 'entry_form.html'
     form_class = EntryCreateForm
     success_url = reverse_lazy('entries')

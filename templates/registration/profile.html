@@ -8,6 +8,8 @@
 {% if user == user_account %}
 <p><a href="{% url 'update' %}">Update profile</a></p>
 {% endif %}
-<h2>Posts</h2>
-<!-- TODO: add users to post models -->
+<h2>Entries</h2>
+{% for entry in entries %}
+<p><a href="{% url 'entry' entry.pk %}">{{ entry.entry_name }}</a></p>
+{% endfor %}
 {% endblock %}

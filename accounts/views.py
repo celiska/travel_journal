@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import CreateView, UpdateView
 from django.urls import reverse_lazy
 
+from viewer.models import Entry
 from .forms import SignUpForm, ProfileUpdateForm, UserUpdateForm
 from .models import Profile
 
@@ -48,4 +49,5 @@ def profile_update(request):
 def profile_view(request, username):
     user_account = User.objects.get(username=username)
     profile = Profile.objects.get(user__username=username)
-    return render(request, 'registration/profile.html', {'user_account': user_account, 'profile': profile})
+    entries = Entry.objects.filter(author=user_account)
+    return render(request, 'registration/profile.html', {'user_account': user_account, 'profile': profile, 'entries': entries})

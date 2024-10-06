@@ -16,9 +16,10 @@ Including another URLconf
 """
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 from travel_journal import settings
+from accounts.views import SignUpView, user_logout, profile_update, profile_view
 from viewer import views
 from viewer.views import home, EntriesList, entry_list, EntryCreateView, EntryDetailView
 
@@ -31,4 +32,10 @@ urlpatterns = [
     path('entries/create', EntryCreateView.as_view(), name='entry_create'),
     path('entry/<pk>', EntryDetailView.as_view(), name='entry'),
 
-    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('accounts/signup/', SignUpView.as_view(), name='signup'),
+    path('accounts/logout/', user_logout, name='logout'),
+    path('accounts/update/', profile_update, name='update'),
+    path('accounts/profile/<username>', profile_view, name='profile'),
+    path('accounts/', include('django.contrib.auth.urls')),
+
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

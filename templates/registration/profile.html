@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Profile</h1>
+<p>Username: {{ user_account.username }}</p>
+<p>Display name: {{ profile.display_name }}</p>
+<p>Bio: {{ profile.bio }}</p>
+{% if user == user_account %}
+<p><a href="{% url 'update' %}">Update profile</a></p>
+{% endif %}
+<h2>Entries</h2>
+{% for entry in entries %}
+<p><a href="{% url 'entry' entry.pk %}">{{ entry.entry_name }}</a></p>
+{% endfor %}
+{% endblock %}

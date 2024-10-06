@@ -1,4 +1,7 @@
+from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import ForeignKey
+
 
 # Create your models here.
 class Country(models.Model):
@@ -77,6 +80,7 @@ CURRENCY_CHOICES = (
 
 class Entry(models.Model):
     entry_name = models.CharField(max_length=100, null=False, blank=False)
+    author = ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
     description = models.TextField(null=False, blank=False)
     country = models.ManyToManyField(Country, blank=False)
     place = models.ManyToManyField(Place, blank=False)

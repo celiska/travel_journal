@@ -17,12 +17,21 @@
         </li>
       </ul>
       <ul class="navbar-nav ml-auto">
+        {% if user.is_authenticated %}
         <li class="nav-item">
-          <a class="nav-link" href="#"><i class="bi bi-person"></i> Sign Up</a>
+          <a class="nav-link" href="{% url 'profile' request.user.username %}"><i class="bi bi-person"></i> {{ request.user.username }}</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#"><i class="bi bi-box-arrow-in-right"></i> Login</a>
+          <a class="nav-link" href="{% url 'logout' %}"><i class="bi bi-box-arrow-left"></i> Logout</a>
         </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'signup' %}"><i class="bi bi-person"></i> Sign Up</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'login' %}"><i class="bi bi-box-arrow-in-right"></i> Login</a>
+        </li>
+        {% endif %}
       </ul>
     </div>
   </div>

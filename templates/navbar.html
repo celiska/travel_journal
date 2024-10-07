@@ -12,9 +12,11 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'entries' %}">Trips</a>
         </li>
+        {% if user.is_authenticated %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'entry_create' %}"><i class="fa-solid fa-pen"></i> Create new</a>
         </li>
+        {% endif %}
       </ul>
       <ul class="navbar-nav ml-auto">
         {% if user.is_authenticated %}

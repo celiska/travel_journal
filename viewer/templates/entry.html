@@ -137,8 +137,6 @@
                     <div class="d-inline">
                         {% for hashtag in entry.hashtag.all %}
                             <span class="badge bg-warning d-inline-block mr-2">#{{ hashtag.hashtag }}</span>
-                        {% empty %}
-                            <p>No hashtags</p>
                         {% endfor %}
                     </div>
                 </div>

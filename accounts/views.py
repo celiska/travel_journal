@@ -1,9 +1,11 @@
-from django.contrib.auth import logout, authenticate, login
+from django.contrib.auth import logout, authenticate, login, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.views.generic import CreateView
 from django.views.generic import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 
@@ -62,3 +64,16 @@ def delete_user(request):
         return redirect('home')
     else:
         return render(request, 'registration/delete.html')
+
+@login_required
+def password_change(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            return redirect('profile', username=request.user.username)
+    else:
+        form = PasswordChangeForm(request.user)
+
+    return render(request, 'registration/password_change.html', {'form': form})

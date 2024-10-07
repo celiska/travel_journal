@@ -19,7 +19,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 from travel_journal import settings
-from accounts.views import SignUpView, user_logout, profile_update, profile_view
+from accounts.views import SignUpView, user_logout, profile_update, profile_view, delete_user
 from viewer import views
 from viewer.views import home, EntriesList, entry_list, EntryCreateView, EntryDetailView
 
@@ -34,8 +34,9 @@ urlpatterns = [
 
     path('accounts/signup/', SignUpView.as_view(), name='signup'),
     path('accounts/logout/', user_logout, name='logout'),
-    path('accounts/update/', profile_update, name='update'),
+    path('accounts/update/', profile_update, name='update_account'),
     path('accounts/profile/<username>', profile_view, name='profile'),
+    path('accounts/delete/', delete_user, name='delete_account'),
     path('accounts/', include('django.contrib.auth.urls')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

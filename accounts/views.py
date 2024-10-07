@@ -1,9 +1,10 @@
 from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 
 from viewer.models import Entry
@@ -51,3 +52,13 @@ def profile_view(request, username):
     profile = Profile.objects.get(user__username=username)
     entries = Entry.objects.filter(author=user_account)
     return render(request, 'registration/profile.html', {'user_account': user_account, 'profile': profile, 'entries': entries})
+
+@login_required
+def delete_user(request):
+    if request.method == 'POST':
+        u = User.objects.get(username=request.user.username)
+        logout(request)
+        u.delete()
+        return redirect('home')
+    else:
+        return render(request, 'registration/delete.html')

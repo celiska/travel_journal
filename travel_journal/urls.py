@@ -17,6 +17,7 @@ Including another URLconf
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
+from django.views.generic import TemplateView
 
 from travel_journal import settings
 from viewer import views
@@ -30,5 +31,8 @@ urlpatterns = [
     path('entries/', entry_list, name='entries'),
     path('entries/create', EntryCreateView.as_view(), name='entry_create'),
     path('entry/<pk>', EntryDetailView.as_view(), name='entry'),
+
+    path('faq', TemplateView.as_view(template_name='faq.html'), name='faq'),
+    path('contact', TemplateView.as_view(template_name='contact.html'), name='contact'),
 
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

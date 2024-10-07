@@ -18,6 +18,7 @@
 - [ ] Tests
 - [x] Separate JavaScript codes into static files
 - [ ] Fix images
+- [ ] Functional search window (optional)
 
 # Tables:
 

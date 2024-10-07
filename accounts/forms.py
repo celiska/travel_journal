@@ -48,7 +48,7 @@ class UserUpdateForm(ModelForm):
 class ProfileUpdateForm(ModelForm):
     class Meta:
         model = Profile
-        fields = ["display_name", "bio"]
+        fields = ["display_name", "bio", "profile_picture"]
 
     display_name = CharField(max_length=20)
     bio = CharField(widget=Textarea(attrs={"class": "form-control"}),

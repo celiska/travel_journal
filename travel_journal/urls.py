@@ -20,8 +20,7 @@ from django.urls import path, include
 
 from travel_journal import settings
 from accounts.views import SignUpView, user_logout, profile_update, profile_view, delete_user
-from viewer import views
-from viewer.views import home, EntriesList, entry_list, EntryCreateView, EntryDetailView
+from viewer.views import home, entry_list, EntryCreateView, EntryDetailView
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),

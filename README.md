@@ -17,8 +17,7 @@
 - [ ] Profiles
 - [ ] Tests
 - [x] Separate JavaScript codes into static files
-
-
+- [ ] Fix images
 
 # Tables:
 

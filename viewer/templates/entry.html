@@ -1,11 +1,23 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
 <div>
     <div class="card shadow-lg">
         <div class="card-header text-left">
             <h1>{{ entry.entry_name }}</h1>
-            <p>By {{ entry.author.profile.display_name }} (<a href="{% url 'profile' entry.author.username %}">{{ entry.author.username }}</a>)</p>
+            <p>
+                By
+                {% if entry.author.profile.profile_picture %}
+                    <img src="{{ entry.author.profile.profile_picture.url }}" alt="Profile picture"
+                         class="img-fluid rounded-circle profile_picture_small">
+                {% else %}
+                    <img src="/images/profiles/profile_default.jpg" alt="Default profile picture"
+                         class="img-fluid rounded-circle profile_picture_small">
+                {% endif %}
+                {{ entry.author.profile.display_name }}
+                (<a href="{% url 'profile' entry.author.username %}">{{ entry.author.username }}</a>)
+            </p>
         </div>
         <div class="card-body">
             <div class="row mb-3">

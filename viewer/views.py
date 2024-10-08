@@ -1,7 +1,7 @@
 from django.db.models import Max
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, DetailView
+from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 
 from viewer.forms import EntryCreateForm
 from viewer.models import Entry, Country, Weather, Place, Hashtag
@@ -77,6 +77,20 @@ class EntryCreateView(CreateView):
 
     def form_valid(self, form):
         return super().form_valid(form)
+
+class EntryUpdateView(UpdateView):
+    template_name = 'entry_form.html'
+    model = Entry
+    form_class = EntryCreateForm
+    success_url = reverse_lazy('entries')
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+class EntryDeleteView(DeleteView):
+    template_name = 'entry_delete.html'
+    model = Entry
+    success_url = reverse_lazy('entries')
 
 class EntryDetailView(DetailView):
     template_name = 'entry.html'

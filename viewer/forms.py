@@ -12,14 +12,27 @@ class EntryCreateForm(forms.ModelForm):
         fields = ['entry_name', 'description', 'country', 'place', 'weather', 'transport',
                   'arrival_date', 'departure_date', 'currency', 'rating', 'cost']
 
+    entry_name = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        label="Název"
+    )
+
+    description = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+        required=True,
+        label="Popis"
+    )
+
     country = forms.ModelMultipleChoiceField(
         queryset=Country.objects.all(),
         widget=forms.SelectMultiple(attrs={'class': 'form-control'}),
+        required=True,
         label="Země"
     )
 
     place = forms.CharField(
         max_length=100,
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
         required=True,
     )
 
@@ -41,6 +54,12 @@ class EntryCreateForm(forms.ModelForm):
 
     departure_date = forms.DateField(
         widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'})
+    )
+
+    cost = forms.DecimalField(
+        min_value=0,
+        step_size=0.01,
+        widget=forms.NumberInput(attrs={'class': 'form-control'}),
     )
 
     def __init__(self, *args, **kwargs):

@@ -1,9 +1,17 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% comment %}
+TODO: finish transcribing form fields to autofill in UpdateView
+{% endcomment %}
+
 {% block content %}
 <div class="container my-5">
+    {% if request.resolver_match.view_name == "entry_update" %}
+    <h2 class="text-center mb-4">Edit Entry</h2>
+    {% else %}
     <h2 class="text-center mb-4">Create New Entry</h2>
+    {% endif %}
     {% if form.errors %}
     <div class="alert alert-danger">
         <ul>
@@ -24,12 +32,12 @@
 
         <div class="mb-3">
             <label for="id_entry_name" class="form-label font-weight-bold">Entry Name</label>
-            <input type="text" name="entry_name" id="id_entry_name" class="form-control" required>
+            {{ form.entry_name }}
         </div>
 
         <div class="mb-3">
             <label for="id_description" class="form-label font-weight-bold">Description</label>
-            <textarea name="description" id="id_description" class="form-control" rows="4" required></textarea>
+            {{ form.description }}
         </div>
 
         <div class="mb-3">
@@ -40,8 +48,9 @@
                 </div>
 
                 <div class="col-md-6">
-                    <label class="form-label font-weight-bold">Place</label>
-                    <input type="text" name="place" id="place" class="form-control" maxlength="100" required>
+                    <label for="id_place" class="form-label font-weight-bold">Place</label>
+                    <!--<input type="text" name="place" id="id_place" class="form-control" maxlength="100" required>-->
+                    {{ form.place }}
                 </div>
             </div>
         </div>
@@ -65,7 +74,7 @@
                 <div class="col-md-8">
                     <label for="id_cost" class="form-label font-weight-bold">Cost</label>
                     <div class="input-group">
-                        <input type="number" name="cost" id="id_cost" class="form-control" step="0.01" min="0">
+                        {{ form.cost }}
                         <span class="input-group-text">{{ form.currency }}</span>
                     </div>
                 </div>

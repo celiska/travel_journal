@@ -1,3 +1,5 @@
+from profile import Profile
+
 from django.db.models import Max
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -108,3 +110,12 @@ class EntryDetailView(DetailView):
 
         context['stayed_for'] = duration
         return context
+
+def search_results(request):
+    query = request.GET.get('query')
+    if query:
+        results = Entry.objects.filter(entry_name__icontains=query) | Entry.objects.filter(description__icontains=query)
+    else:
+        results = Entry.objects.none()
+
+    return render(request, 'search_results.html', {'results': results, 'query': query})

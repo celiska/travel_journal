@@ -21,6 +21,7 @@ from django.views.generic import TemplateView
 
 from travel_journal import settings
 from viewer import views
+from viewer.views import home, EntriesList, entry_list, EntryCreateView, EntryDetailView, search_results
 from viewer.views import home, EntriesList, entry_list, EntryCreateView, EntryDetailView, EntryUpdateView, \
     EntryDeleteView
 
@@ -37,5 +38,9 @@ urlpatterns = [
 
     path('faq', TemplateView.as_view(template_name='faq.html'), name='faq'),
     path('contact', TemplateView.as_view(template_name='contact.html'), name='contact'),
+    path('search/', search_results, name='search_results'),
 
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -150,16 +150,19 @@
     </div>
 </div>
 
-<div class="row mb-3">
+<div class="row mb-3 mt-5">
     <div class="col-md-12">
-        <h5><strong>Images:</strong></h5>
         <div class="d-flex flex-wrap">
             {% for image in entry.image_set.all %}
-                <div class="m-2">
-                    <img src="{{ image.image.url }}" alt="{{ image.description }}" class="img-fluid rounded" style="max-width: 150px; height: auto;">
-                    {% if image.description %}
-                        <p>{{ image.description }}</p>
-                    {% endif %}
+                <div class="card m-2" style="width: 18rem;">
+                    <img src="{{ image.image.url }}" alt="{{ image.description }}" class="card-img-top" style="max-height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        {% if image.description %}
+                            <p class="card-text">{{ image.description }}</p>
+                        {% else %}
+                            <p class="card-text text-muted">No description available.</p>
+                        {% endif %}
+                    </div>
                 </div>
             {% empty %}
                 <p>No images available</p>

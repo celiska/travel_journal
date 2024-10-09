@@ -117,10 +117,16 @@ TODO: finish transcribing form fields to autofill in UpdateView
         <!-- Rating -->
         <div class="mb-3">
             <label class="form-label font-weight-bold">Rating</label>
+            {{ form.rating }}
+            {% comment %}
             <select name="rating" class="form-control">
                 <option value="">-- Choose rating --</option>
                 {% for i in "12345" %}
+                    {% if request.resolver_match.view_name == "entry_update" and i == form.instance.rating %}
+                    <option value="{{ i }}" selected>
+                    {% else %}
                     <option value="{{ i }}">
+                    {% endif %}
                         {% for j in "12345" %}
                             {% if j <= i %}
                                 ⭐
@@ -129,6 +135,7 @@ TODO: finish transcribing form fields to autofill in UpdateView
                     </option>
                 {% endfor %}
             </select>
+            {% endcomment %}
         </div>
 
         <!-- Hashtags -->

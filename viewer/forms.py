@@ -1,5 +1,6 @@
 from django import forms
-from viewer.models import Entry, Country, Weather, Transport, CURRENCY_CHOICES, Place, Hashtag
+from viewer.models import Entry, Country, Weather, Transport, CURRENCY_CHOICES, Place, Hashtag, RATING_CHOICES
+
 
 class EntryCreateForm(forms.ModelForm):
     hashtags = forms.CharField(
@@ -60,6 +61,16 @@ class EntryCreateForm(forms.ModelForm):
         min_value=0,
         step_size=0.01,
         widget=forms.NumberInput(attrs={'class': 'form-control'}),
+    )
+
+    currency = forms.ChoiceField(
+        choices=CURRENCY_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-control'}),
+    )
+
+    rating = forms.ChoiceField(
+        choices=RATING_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-control'}),
     )
 
     def __init__(self, *args, **kwargs):

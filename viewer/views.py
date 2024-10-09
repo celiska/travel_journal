@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 
-from viewer.forms import EntryCreateForm
+from viewer.forms import EntryCreateForm, ImageUploadForm
 from viewer.models import Entry, Country, Weather, Place, Hashtag
 
 def home(request):
@@ -149,6 +149,29 @@ class EntryDetailView(DetailView):
         context['transport_icon_list'] = transport_icon_list
 
         return context
+
+""" (Alternative upload view)
+def image_upload(request, pk):
+    if request.method == 'POST':
+        print(request.FILES)
+        form = ImageUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            image = form.save(commit=False)
+            form.entry = Entry.objects.get(pk=pk)
+            form.save()
+        return render(request, 'image_upload.html', {'form': form})
+    else:
+        form = ImageUploadForm()
+        return render(request, 'image_upload.html', {'form': form})
+"""
+class ImageUploadView(CreateView):
+    template_name = 'image_upload.html'
+    form_class = ImageUploadForm
+    success_url = reverse_lazy('image_upload')
+
+    def form_valid(self, form):
+        form.entry = Entry.objects.get(pk=self.kwargs['pk'])
+        return super().form_valid(form)
 
 
 def search_results(request):

@@ -21,7 +21,8 @@ from django.views.generic import TemplateView
 
 from travel_journal import settings
 from viewer import views
-from viewer.views import home, EntriesList, entry_list, EntryCreateView, EntryDetailView, search_results
+from viewer.views import home, EntriesList, entry_list, EntryCreateView, EntryDetailView, search_results, \
+    ImageUploadView
 from viewer.views import home, EntriesList, entry_list, EntryCreateView, EntryDetailView, EntryUpdateView, \
     EntryDeleteView
 
@@ -35,6 +36,7 @@ urlpatterns = [
     path('entry/<pk>', EntryDetailView.as_view(), name='entry'),
     path('entry/<pk>/update', EntryUpdateView.as_view(), name='entry_update'),
     path('entry/<pk>/delete', EntryDeleteView.as_view(), name='entry_delete'),
+    path('entry/<pk>/image_upload', ImageUploadView.as_view(), name='image_upload'),
 
     path('faq', TemplateView.as_view(template_name='faq.html'), name='faq'),
     path('contact', TemplateView.as_view(template_name='contact.html'), name='contact'),

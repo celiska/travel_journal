@@ -1,5 +1,5 @@
 from django import forms
-from viewer.models import Entry, Country, Weather, Transport, CURRENCY_CHOICES, Place, Hashtag, RATING_CHOICES
+from viewer.models import Entry, Country, Weather, Transport, CURRENCY_CHOICES, Place, Hashtag, RATING_CHOICES, Image
 
 
 class EntryCreateForm(forms.ModelForm):
@@ -114,3 +114,18 @@ class EntryCreateForm(forms.ModelForm):
                 raise forms.ValidationError("The departure date cannot be earlier than the arrival date.")
 
         return cleaned_data
+
+class ImageUploadForm(forms.ModelForm):
+    class Meta:
+        model = Image
+        fields = ['image', 'description']
+
+    image = forms.ImageField(
+        widget=forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        required=True,
+
+    )
+    description = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        required=False
+    )

@@ -11,14 +11,9 @@
                 <div class="col-md-8">
                     <h5><strong>Description:</strong></h5>
                     <p>{{ entry.description }}</p>
-
                     <h5><strong>Country:</strong></h5>
-                    <div>
-                        {% for country in entry.country.all %}
-                            {{ country.country }}{% if not forloop.last %}, {% endif %}
-                        {% empty %}
-                            No country
-                        {% endfor %}
+                    <div class="mb-3">
+                        {{ entry.country.all|join:", " }}
                     </div>
 
                     <div class="row mb-3">
@@ -35,14 +30,9 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <h5><strong>Stayed For:</strong></h5>
-                            {% if stayed_for %}
-                                <p>{{ stayed_for }} days</p>
-                            {% else %}
-                                <p>Departure date not set</p>
-                            {% endif %}
+                            <p>{{ stayed_for|default_if_none:"Departure date not set" }}</p>
                         </div>
                     </div>
-
 
                     <div class="row mb-3">
                         <div class="col-md-6">
@@ -52,28 +42,8 @@
                         <div class="col-md-6">
                             <h5><strong>Weather:</strong></h5>
                             <div>
-                                {% for weather in entry.weather.all %}
-                                    {% if weather.type == "overcast" %}
-                                        <i class="fa-solid fa-cloud" title="Overcast"></i>
-                                    {% elif weather.type == "rain" %}
-                                        <i class="fa-solid fa-cloud-rain" title="Rain"></i>
-                                    {% elif weather.type == "sun" %}
-                                        <i class="fa-solid fa-sun" title="Sun"></i>
-                                    {% elif weather.type == "storm" %}
-                                        <i class="fa-solid fa-bolt" title="Storm"></i>
-                                    {% elif weather.type == "wind" %}
-                                        <i class="fa-solid fa-wind" title="Wind"></i>
-                                    {% elif weather.type == "snow" %}
-                                        <i class="fa-solid fa-snowflake" title="Snow"></i>
-                                    {% elif weather.type == "fog" %}
-                                        <i class="fa-solid fa-smog" title="Fog"></i>
-                                    {% elif weather.type == "hail" %}
-                                        <i class="fa-solid fa-cloud-meatball" title="Hail"></i>
-                                    {% elif weather.type == "chill" %}
-                                        <i class="fa-solid fa-temperature-low" title="Chill"></i>
-                                    {% elif weather.type == "hot" %}
-                                        <i class="fa-solid fa-temperature-high" title="Hot"></i>
-                                    {% endif %}
+                                {% for icon in weather_icon_list %}
+                                    <i class="fa-solid fa-{{ icon }}" title="Weather Icon"></i>
                                 {% endfor %}
                             </div>
                         </div>
@@ -83,32 +53,8 @@
                         <div class="col-md-6">
                             <h5><strong>Transport:</strong></h5>
                             <div>
-                                {% for transport in entry.transport.all %}
-                                    {% if transport.type == "plane" %}
-                                        <i class="fa-solid fa-plane" title="Plane"></i>
-                                    {% elif transport.type == "train" %}
-                                        <i class="fa-solid fa-train" title="Train"></i>
-                                    {% elif transport.type == "metro" %}
-                                        <i class="fa-solid fa-train-subway" title="Metro"></i>
-                                    {% elif transport.type == "tram" %}
-                                        <i class="fa-solid fa-train-tram" title="Tram"></i>
-                                    {% elif transport.type == "car" %}
-                                        <i class="fa-solid fa-car" title="Car"></i>
-                                    {% elif transport.type == "bus" %}
-                                        <i class="fa-solid fa-bus" title="Bus"></i>
-                                    {% elif transport.type == "cable_car" %}
-                                        <i class="fa-solid fa-cable-car" title="Cable car"></i>
-                                    {% elif transport.type == "on_foot" %}
-                                        <i class="fa-solid fa-person-walking" title="On foot"></i>
-                                    {% elif transport.type == "boat" %}
-                                        <i class="fa-solid fa-sailboat" title="Boat"></i>
-                                    {% elif transport.type == "bicycle" %}
-                                        <i class="fa-solid fa-bicycle" title="Bicycle"></i>
-                                    {% elif transport.type == "motorcycle" %}
-                                        <i class="fa-solid fa-motorcycle" title="Motorcycle"></i>
-                                    {% elif transport.type == "horse" %}
-                                        <i class="fa-solid fa-horse" title="Horse"></i>
-                                    {% endif %}
+                                {% for icon in transport_icon_list %}
+                                    <i class="fa-solid fa-{{ icon }}" title="Transport Icon"></i>
                                 {% endfor %}
                             </div>
                         </div>
@@ -118,15 +64,15 @@
                 <div class="col-md-4 text-end">
                     <h5><strong>Rating:</strong></h5>
                     <div>
-                            <p>
-                                {% for i in "12345" %}
-                                    {% if i|add:"0" <= entry.rating %}
-                                        <span><i class="fa-solid fa-star fa-2xl" style="color: #FFD43B;"></i></span>
-                                    {% else %}
-                                        <span><i class="fa-regular fa-star fa-2xl" style="color: #FFD43B;"></i></span>
-                                    {% endif %}
-                                {% endfor %}
-                            </p>
+                        <p>
+                            {% for i in "12345" %}
+                                {% if i|add:"0" <= entry.rating %}
+                                    <span><i class="fa-solid fa-star fa-2xl star-full"></i></span>
+                                {% else %}
+                                    <span><i class="fa-regular fa-star fa-2xl star-empty"></i></span>
+                                {% endif %}
+                            {% endfor %}
+                        </p>
                     </div>
                 </div>
             </div>
@@ -142,7 +88,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
         <div class="card-footer text-center">
             <a href="{% url 'entries' %}" class="btn btn-secondary">Back to List</a>
@@ -154,15 +99,10 @@
     <div class="col-md-12">
         <div class="d-flex flex-wrap">
             {% for image in entry.image_set.all %}
-                <div class="card m-2" style="width: 18rem;">
-                    <img src="{{ image.image.url }}" alt="{{ image.description }}" class="card-img-top" style="max-height: 200px; object-fit: cover;">
-                    <div class="card-body">
-                        {% if image.description %}
-                            <p class="card-text">{{ image.description }}</p>
-                        {% else %}
-                            <p class="card-text text-muted">No description available.</p>
-                        {% endif %}
-                    </div>
+                <div class="card m-2 img-entry">
+                    <a href="{{ image.image.url }}" data-lightbox="entry-images" data-title="{{ image.description }}">
+                        <img src="{{ image.image.url }}" alt="{{ image.description }}" class="card-img-top">
+                    </a>
                 </div>
             {% empty %}
                 <p>No images available</p>
@@ -171,4 +111,5 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/lightbox2@2.11.3/dist/js/lightbox.min.js"></script>
 {% endblock %}

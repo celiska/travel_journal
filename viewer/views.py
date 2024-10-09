@@ -108,8 +108,48 @@ class EntryDetailView(DetailView):
         else:
             duration = None
 
+        weather_icons = {
+            "overcast": "cloud",
+            "rain": "cloud-rain",
+            "sun": "sun",
+            "storm": "bolt",
+            "wind": "wind",
+            "snow": "snowflake",
+            "fog": "smog",
+            "hail": "cloud-meatball",
+            "chill": "temperature-low",
+            "hot": "temperature-high"
+        }
+
+        transport_icons = {
+            "plane": "plane",
+            "train": "train",
+            "metro": "train-subway",
+            "tram": "train-tram",
+            "car": "car",
+            "bus": "bus",
+            "cable_car": "cable-car",
+            "on_foot": "person-walking",
+            "boat": "sailboat",
+            "bicycle": "bicycle",
+            "motorcycle": "motorcycle",
+            "horse": "horse"
+        }
+
+        weather_icon_list = []
+        for weather in entry.weather.all():
+            weather_icon_list.append(weather_icons.get(weather.type, "question"))
+
+        transport_icon_list = []
+        for transport in entry.transport.all():
+            transport_icon_list.append(transport_icons.get(transport.type, "question"))
+
         context['stayed_for'] = duration
+        context['weather_icon_list'] = weather_icon_list
+        context['transport_icon_list'] = transport_icon_list
+
         return context
+
 
 def search_results(request):
     query = request.GET.get('query')

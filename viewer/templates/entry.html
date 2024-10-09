@@ -11,52 +11,68 @@
                 <div class="col-md-8">
                     <h5><strong>Description:</strong></h5>
                     <p>{{ entry.description }}</p>
-                    <h5><strong>Country:</strong></h5>
+                    <h5><strong>Visited Places:</strong></h5>
                     <div class="mb-3">
-                        {{ entry.country.all|join:", " }}
+                        {% for place in entry.place.all %}
+                            <p>{{ place.place }} ({{ place.country }})</p>
+                        {% empty %}
+                            <p>No places visited yet.</p>
+                        {% endfor %}
                     </div>
 
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <h5><strong>Arrival Date:</strong></h5>
-                            <p>{{ entry.arrival_date }}</p>
+                            {% if entry.arrival_date %}
+                                <h5><strong>Arrival Date:</strong></h5>
+                                <p>{{ entry.arrival_date }}</p>
+                            {% endif %}
                         </div>
                         <div class="col-md-6">
-                            <h5><strong>Departure Date:</strong></h5>
-                            <p>{{ entry.departure_date }}</p>
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <h5><strong>Stayed For:</strong></h5>
-                            <p>{{ stayed_for|default_if_none:"Departure date not set" }}</p>
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <h5><strong>Cost:</strong></h5>
-                            <p>{{ entry.cost }} {{ entry.currency }}</p>
-                        </div>
-                        <div class="col-md-6">
-                            <h5><strong>Weather:</strong></h5>
-                            <div>
-                                {% for icon in weather_icon_list %}
-                                    <i class="fa-solid fa-{{ icon }}" title="Weather Icon"></i>
-                                {% endfor %}
-                            </div>
+                            {% if entry.departure_date %}
+                                <h5><strong>Departure Date:</strong></h5>
+                                <p>{{ entry.departure_date }}</p>
+                            {% endif %}
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <h5><strong>Transport:</strong></h5>
-                            <div>
-                                {% for icon in transport_icon_list %}
-                                    <i class="fa-solid fa-{{ icon }}" title="Transport Icon"></i>
-                                {% endfor %}
-                            </div>
+                            {% if entry.arrival_date and entry.departure_date %}
+                                <h5><strong>Stayed For:</strong></h5>
+                                <p>{{ stayed_for }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {% if entry.cost %}
+                                <h5><strong>Cost:</strong></h5>
+                                <p>{{ entry.cost }} {{ entry.currency }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            {% if weather %}
+                                <h5><strong>Weather:</strong></h5>
+                                <div>
+                                    {% for icon in weather_icon_list %}
+                                        <i class="fa-solid fa-{{ icon }}" title="Weather Icon"></i>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {% if transport %}
+                                <h5><strong>Transport:</strong></h5>
+                                <div>
+                                    {% for icon in transport_icon_list %}
+                                        <i class="fa-solid fa-{{ icon }}" title="Transport Icon"></i>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -82,8 +98,6 @@
                     <div class="d-inline">
                         {% for hashtag in entry.hashtag.all %}
                             <span class="badge bg-warning d-inline-block mr-2">#{{ hashtag.hashtag }}</span>
-                        {% empty %}
-                            <p>No hashtags</p>
                         {% endfor %}
                     </div>
                 </div>
@@ -104,8 +118,6 @@
                         <img src="{{ image.image.url }}" alt="{{ image.description }}" class="card-img-top">
                     </a>
                 </div>
-            {% empty %}
-                <p>No images available</p>
             {% endfor %}
         </div>
     </div>

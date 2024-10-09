@@ -3,74 +3,71 @@ from viewer.models import Entry, Country, Weather, Transport, CURRENCY_CHOICES, 
 
 
 class EntryCreateForm(forms.ModelForm):
-    hashtags = forms.CharField(
-        max_length=255,
-        required=False,
-    )
-
     class Meta:
         model = Entry
-        fields = ['entry_name', 'description', 'country', 'place', 'weather', 'transport',
-                  'arrival_date', 'departure_date', 'currency', 'rating', 'cost']
+        fields = '__all__'
 
     entry_name = forms.CharField(
-        widget=forms.TextInput(attrs={'class': 'form-control'}),
-        label="Název"
+        widget=forms.TextInput(attrs={'class': 'form-control','maxlength': '35'})
     )
 
     description = forms.CharField(
-        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
-        required=True,
-        label="Popis"
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'maxlength': '300'})
     )
 
     country = forms.ModelMultipleChoiceField(
         queryset=Country.objects.all(),
         widget=forms.SelectMultiple(attrs={'class': 'form-control'}),
-        required=True,
-        label="Země"
+        required=False
     )
 
     place = forms.CharField(
-        max_length=100,
         widget=forms.TextInput(attrs={'class': 'form-control'}),
-        required=True,
+        required=False
     )
 
     weather = forms.ModelMultipleChoiceField(
         queryset=Weather.objects.all(),
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
-        label="Počasí"
+        required=False
     )
 
     transport = forms.ModelMultipleChoiceField(
         queryset=Transport.objects.all(),
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
-        label="Doprava"
+        required=False
     )
 
     arrival_date = forms.DateField(
-        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'})
+        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+        required=False
     )
 
     departure_date = forms.DateField(
-        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'})
+        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+        required = False
     )
 
     cost = forms.DecimalField(
         min_value=0,
         step_size=0.01,
         widget=forms.NumberInput(attrs={'class': 'form-control'}),
+        required=False
     )
 
     currency = forms.ChoiceField(
         choices=CURRENCY_CHOICES,
         widget=forms.Select(attrs={'class': 'form-control'}),
+        required=False
     )
 
     rating = forms.ChoiceField(
         choices=RATING_CHOICES,
         widget=forms.Select(attrs={'class': 'form-control'}),
+    )
+    hashtags = forms.CharField(
+        max_length=50,
+        required=False
     )
 
     def __init__(self, *args, **kwargs):
@@ -84,13 +81,17 @@ class EntryCreateForm(forms.ModelForm):
         if commit:
             entry.save()
 
-        countries = self.cleaned_data['country']
-        entry.country.set(countries)
+        places_countries_data = self.data.get('places_countries', '')
+        if places_countries_data:
+            places_countries_list = places_countries_data.split(';')
 
-        place_name = self.cleaned_data['place'].strip()
-        for country in countries:
-            place, created = Place.objects.get_or_create(place=place_name, country=country)
-            entry.place.add(place)
+            for item in places_countries_list:
+                if item:
+                    place_name, country_id = item.split(':')
+                    country = Country.objects.get(id=country_id)
+                    place, created = Place.objects.get_or_create(place=place_name.strip(), country=country)
+                    entry.place.add(place)
+                    entry.country.add(country)
 
         hashtags_str = self.cleaned_data.get('hashtags', '')
         if hashtags_str:
@@ -105,10 +106,11 @@ class EntryCreateForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        cost = cleaned_data.get("cost")
-        currency = cleaned_data.get("currency")
+        arrival_date = cleaned_data.get("arrival_date")
+        departure_date = cleaned_data.get("departure_date")
 
-        if cost and not currency:
-            raise forms.ValidationError("Pokud je vyplněná cena, je potřeba vybrat také měnu.")
+        if arrival_date and departure_date:
+            if departure_date < arrival_date:
+                raise forms.ValidationError("The departure date cannot be earlier than the arrival date.")
 
         return cleaned_data

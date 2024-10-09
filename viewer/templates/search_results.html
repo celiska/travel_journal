@@ -2,23 +2,29 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h2>Search Results</h2>
-    {% if query %}
-        <p>Results for "{{ query }}":</p>
-        {% if results %}
-            <ul>
-                {% for result in results %}
-                    <li>
-                        <a href="{% url 'entry' result.pk %}">{{ result.entry_name }}</a>
-                        <p>{{ result.description|slice:":200" }}...</p>
-                    </li>
-                {% endfor %}
-            </ul>
+    <div class="text-center mb-4">
+        <h2 class="font-weight-bold">Search Results</h2>
+        {% if query %}
+            <p class="lead">Results for "<strong>{{ query }}</strong>":</p>
         {% else %}
-            <p>No results found.</p>
+            <p class="lead">Please enter a search query.</p>
         {% endif %}
+    </div>
+
+    <!-- Výsledky hledání -->
+    {% if results %}
+        <div class="list-group">
+            {% for result in results %}
+                <a href="{% url 'entry' result.pk %}" class="list-group-item list-group-item-action">
+                    <h5 class="mb-1">{{ result.entry_name }}</h5>
+                    <p class="mb-1">{{ result.description|slice:":200" }}...</p>
+                </a>
+            {% endfor %}
+        </div>
     {% else %}
-        <p>Please enter a search query.</p>
+        <div class="alert alert-warning text-center" role="alert">
+            No results found for "<strong>{{ query }}</strong>". Please try again with a different query.
+        </div>
     {% endif %}
 </div>
 {% endblock %}

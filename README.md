@@ -17,8 +17,8 @@
 - [ ] Profiles
 - [ ] Tests
 - [x] Separate JavaScript codes into static files
-- [ ] Fix images
-- [ ] Functional search window (optional)
+- [x] Fix images
+- [x] Functional search window (optional)
 
 # Tables:
 

@@ -1,10 +1,52 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1 class="display-4">Travel Journal home page</h1>
-    <p>Co to je?</p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ultricies tempor nulla ac facilisis. Fusce efficitur lorem sit amet arcu vulputate commodo. Praesent ligula ex, ullamcorper tempus nibh non, dapibus lobortis nisi. Fusce semper, nulla eu aliquam semper, arcu nunc sagittis nisl, et imperdiet risus lacus vitae metus. Pellentesque nunc massa, lacinia sed neque ut, commodo cursus erat. Fusce fermentum nibh sapien, nec scelerisque mi vulputate vitae. Integer ipsum ex, sagittis eu enim sed, tempor vulputate mauris.
-    Etiam auctor non diam eget convallis. Phasellus vulputate ipsum in lacus laoreet venenatis. Aenean consectetur ipsum sed varius pellentesque. Sed nisl ligula, fringilla ut erat id, facilisis vestibulum turpis. Praesent feugiat scelerisque sollicitudin. Suspendisse mattis, elit at fringilla accumsan, ex metus iaculis turpis, sit amet scelerisque enim elit pulvinar velit. Aliquam cursus leo sit amet tincidunt ullamcorper. Quisque vitae dui dui. Nam a purus sit amet est finibus aliquet et sit amet purus.</p>
-    <hr class="my-4">
-    <p>Text</p>
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 font-weight-bold">Welcome to Your Travel Journal</h1>
+        <p class="lead">Capture your adventures, discover new destinations, and relive your favorite moments.</p>
+        <a class="btn btn-secondary btn-lg mt-3" href="{% url 'entries' %}" role="button">Explore Trips</a>
+    </div>
+
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-8 text-center">
+            <h2 class="mb-3">What is Travel Journal?</h2>
+            <p>
+                The Travel Journal is your personal digital diary, designed to help you capture and document your most memorable journeys. Whether you're traveling across the globe or exploring your own backyard, this tool lets you store your favorite memories, places, and moments in one convenient place.
+                With easy-to-use features, you can add descriptions, upload photos, and even track your route. No matter where your adventures take you, Travel Journal makes sure your experiences are preserved forever.
+            </p>
+        </div>
+    </div>
+
+    <div class="row text-center">
+        <div class="col-md-4">
+            <i class="fas fa-map-marked-alt fa-3x mb-3 text-dark"></i>
+            <h4 class="font-weight-bold">Track Your Journeys</h4>
+            <p>Keep a detailed record of all your adventures and favorite places you have visited.</p>
+        </div>
+        <div class="col-md-4">
+            <i class="fas fa-camera-retro fa-3x mb-3 text-dark"></i>
+            <h4 class="font-weight-bold">Capture Moments</h4>
+            <p>Add photos to your journal entries and relive your travels visually.</p>
+        </div>
+        <div class="col-md-4">
+            <i class="fas fa-share-alt fa-3x mb-3 text-dark"></i>
+            <h4 class="font-weight-bold">Share Your Stories</h4>
+            <p>Share your journal with friends and family or keep it private—it's up to you!</p>
+        </div>
+    </div>
+
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-8 text-center">
+            <h2 class="mb-3">Why Start a Travel Journal?</h2>
+            <p>
+                Traveling opens the door to incredible experiences, but memories can fade over time. A travel journal helps you capture the little details of your journey that might otherwise be forgotten. Whether it's the smell of a bustling marketplace, the taste of a local dish, or the warmth of a sunset on a distant shore, documenting your adventures ensures that these moments stay with you forever. Plus, it's a great way to share your story with others and inspire them to explore new places.
+            </p>
+        </div>
+    </div>
+
+    <div class="text-center mt-5">
+        <a class="btn btn-success btn-lg" href="{% url 'entry_create' %}">Start Your First Journey</a>
+    </div>
+</div>
 {% endblock %}

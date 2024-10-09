@@ -78,21 +78,30 @@ CURRENCY_CHOICES = (
     ("USD", "U.S. dollar (USD)")
 )
 
+RATING_CHOICES = (
+    (1, "⭐"),
+    (2, "⭐⭐"),
+    (3, "⭐⭐⭐"),
+    (4, "⭐⭐⭐⭐"),
+    (5, "⭐⭐⭐⭐⭐")
+)
+
 class Entry(models.Model):
     entry_name = models.CharField(max_length=100, null=False, blank=False)
     author = ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
     description = models.TextField(null=False, blank=False)
     country = models.ManyToManyField(Country, blank=False)
     place = models.ManyToManyField(Place, blank=False)
-    arrival_date = models.DateField(null=False, blank=False)
+    arrival_date = models.DateField(null=True, blank=True)
     departure_date = models.DateField(null=True, blank=True)
     stayed_for = models.IntegerField(null=True, blank=True)
-    transport = models.ManyToManyField(Transport, blank=False)
+    transport = models.ManyToManyField(Transport, blank=True)
     cost = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
     currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, default="USD", null=True, blank=True)
-    weather = models.ManyToManyField(Weather, blank=False)
-    rating = models.IntegerField(default=0, null=False, blank=False)
+    weather = models.ManyToManyField(Weather, blank=True)
+    rating = models.IntegerField(choices=RATING_CHOICES, default=1, null=True, blank=True)
     hashtag = models.ManyToManyField(Hashtag, blank=True)
+    is_private = models.BooleanField(default=False)
 
     class Meta:
         verbose_name_plural = "Entries"

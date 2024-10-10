@@ -5,9 +5,10 @@
     <div class="card p-4 mt-5" style="width: 400px;">
         <h3 class="text-center mb-4">Upload image for <a href="{% url 'entry' entry_pk %}">{{ entry_name }}</a></h3>
         <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
+            {% csrf_token %}
+            {{ form.as_p }}
         <input id="id_submit" type="submit" value="Submit" class="btn btn-primary w-100">
         </form>
+    </div>
 </div>
 {% endblock %}

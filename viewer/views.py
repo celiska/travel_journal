@@ -161,6 +161,7 @@ class ImageUploadView(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['entry_pk'] = self.kwargs['pk']
+        context['entry_name'] = Entry.objects.get(pk=context['entry_pk']).entry_name
         return context
 
     def form_valid(self, form):

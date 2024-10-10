@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from accounts.models import Profile
 from viewer.models import Country, Place, Image, Transport, Weather, Entry, Hashtag
 
 # Register your models here.

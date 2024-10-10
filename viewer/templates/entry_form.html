@@ -3,6 +3,11 @@
 
 {% block content %}
 <div class="container my-5">
+
+    <div class="d-flex justify-content-end">
+        {{ form.is_private }}
+    </div>
+
     {% if request.resolver_match.view_name == "entry_update" %}
         <h2 class="text-center mb-4">Edit Entry</h2>
     {% else %}
@@ -28,14 +33,16 @@
         {% csrf_token %}
 
         <!-- Entry Name -->
-        <div class="mb-3">
-            <label for="id_entry_name" class="form-label font-weight-bold">Entry Name</label>
-            {{ form.entry_name }}
+        <div class="mb-3 d-flex justify-content-between align-items-center">
+            <div>
+                <label class="form-label font-weight-bold">Entry Name*</label>
+                {{ form.entry_name }}
+            </div>
         </div>
 
         <!-- Description -->
         <div class="mb-3">
-            <label class="form-label font-weight-bold">Description</label>
+            <label class="form-label font-weight-bold">Description*</label>
             {{ form.description }}
         </div>
 
@@ -43,12 +50,12 @@
         <div class="mb-3">
             <div class="row">
                 <div class="col-md-6">
-                    <label class="form-label font-weight-bold">Visited Place</label>
+                    <label class="form-label font-weight-bold">Visited Place*</label>
                     <input type="text" id="place-input" class="form-control" maxlength="30">
                 </div>
 
                 <div class="col-md-6">
-                    <label class="form-label font-weight-bold">Country</label>
+                    <label class="form-label font-weight-bold">Country*</label>
                     <select id="country-select" class="form-control">
                         {% for country in form.country.field.queryset %}
                             <option value="{{ country.id }}">{{ country }}</option>

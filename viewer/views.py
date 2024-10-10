@@ -79,6 +79,7 @@ class EntryCreateView(CreateView):
     success_url = reverse_lazy('entries')
 
     def form_valid(self, form):
+        form.instance.author = self.request.user
         return super().form_valid(form)
 
 class EntryUpdateView(UpdateView):

@@ -5,7 +5,10 @@ from viewer.models import Entry, Country, Weather, Transport, CURRENCY_CHOICES, 
 class EntryCreateForm(forms.ModelForm):
     class Meta:
         model = Entry
-        fields = '__all__'
+        exclude = ['author']
+        widgets = {
+            'is_private': forms.RadioSelect(choices=[(True, 'Private'), (False, 'Public')])
+        }
 
     entry_name = forms.CharField(
         widget=forms.TextInput(attrs={'class': 'form-control','maxlength': '35'})
@@ -106,6 +109,7 @@ class EntryCreateForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
+
         arrival_date = cleaned_data.get("arrival_date")
         departure_date = cleaned_data.get("departure_date")
 
@@ -114,6 +118,7 @@ class EntryCreateForm(forms.ModelForm):
                 raise forms.ValidationError("The departure date cannot be earlier than the arrival date.")
 
         return cleaned_data
+
 
 class ImageUploadForm(forms.ModelForm):
     class Meta:

@@ -6,7 +6,8 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 
 from viewer.forms import EntryCreateForm, ImageUploadForm
-from viewer.models import Entry, Country, Weather, Place, Hashtag
+from viewer.models import Entry, Country, Weather, Place, Hashtag, Image
+
 
 def home(request):
     return render(request, "home.html")
@@ -169,3 +170,10 @@ def search_results(request):
         results = Entry.objects.none()
 
     return render(request, 'search_results.html', {'results': results, 'query': query})
+
+class ImageDeleteView(DeleteView):
+    template_name = 'image_delete.html'
+    model = Image
+
+    def get_success_url(self):
+        return reverse_lazy('entry', kwargs={'pk': self.object.entry.pk})

@@ -154,7 +154,14 @@ class EntryDetailView(DetailView):
 class ImageUploadView(CreateView):
     template_name = 'image_upload.html'
     form_class = ImageUploadForm
-    success_url = reverse_lazy('home')
+
+    def get_success_url(self):
+        return reverse_lazy('image_upload', kwargs={'pk': self.kwargs['pk']})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['entry_pk'] = self.kwargs['pk']
+        return context
 
     def form_valid(self, form):
         self.object = form.save(commit=False)

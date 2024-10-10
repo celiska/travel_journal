@@ -150,29 +150,16 @@ class EntryDetailView(DetailView):
 
         return context
 
-""" (Alternative upload view)
-def image_upload(request, pk):
-    if request.method == 'POST':
-        print(request.FILES)
-        form = ImageUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            image = form.save(commit=False)
-            form.entry = Entry.objects.get(pk=pk)
-            form.save()
-        return render(request, 'image_upload.html', {'form': form})
-    else:
-        form = ImageUploadForm()
-        return render(request, 'image_upload.html', {'form': form})
-"""
 class ImageUploadView(CreateView):
     template_name = 'image_upload.html'
     form_class = ImageUploadForm
-    success_url = reverse_lazy('image_upload')
+    success_url = reverse_lazy('home')
 
     def form_valid(self, form):
-        form.entry = Entry.objects.get(pk=self.kwargs['pk'])
+        self.object = form.save(commit=False)
+        self.object.entry = Entry.objects.get(pk=self.kwargs['pk'])
+        self.object.save()
         return super().form_valid(form)
-
 
 def search_results(request):
     query = request.GET.get('query')

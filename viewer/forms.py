@@ -1,23 +1,20 @@
 from django import forms
 from viewer.models import Entry, Country, Weather, Transport, CURRENCY_CHOICES, Place, Hashtag, RATING_CHOICES, Image
 
-from viewer.models import Entry, Country, Weather, Transport, CURRENCY_CHOICES, Place, Hashtag
 
 class EntryCreateForm(forms.ModelForm):
-    hashtags = forms.CharField(
-        max_length=255,
-        required=False,
-    )
-
     class Meta:
         model = Entry
         exclude = ['author']
-        widgets = {
-            'is_private': forms.RadioSelect(choices=[(True, 'Private'), (False, 'Public')])
-        }
+
+    is_private = forms.ChoiceField(
+        choices=[(True, 'Private'), (False, 'Public')],
+        widget=forms.RadioSelect,
+        initial=True
+    )
 
     entry_name = forms.CharField(
-        widget=forms.TextInput(attrs={'class': 'form-control','maxlength': '35'})
+        widget=forms.TextInput(attrs={'class': 'form-control', 'maxlength': '35'})
     )
 
     description = forms.CharField(
@@ -50,17 +47,16 @@ class EntryCreateForm(forms.ModelForm):
     arrival_date = forms.DateField(
         widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
         required=False
-        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'})
     )
 
     departure_date = forms.DateField(
         widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
-        required = False
+        required=False
     )
 
     cost = forms.DecimalField(
         min_value=0,
-        step_size=0.01,
+        decimal_places=2,  # Oprava: decimal_places pro přesnost
         widget=forms.NumberInput(attrs={'class': 'form-control'}),
         required=False
     )
@@ -75,6 +71,7 @@ class EntryCreateForm(forms.ModelForm):
         choices=RATING_CHOICES,
         widget=forms.Select(attrs={'class': 'form-control'}),
     )
+
     hashtags = forms.CharField(
         max_length=50,
         required=False
@@ -94,8 +91,8 @@ class EntryCreateForm(forms.ModelForm):
         places_countries_data = self.data.get('places_countries', '')
         if places_countries_data:
             places_countries_list = places_countries_data.split(';')
-        countries = self.cleaned_data['country']
-        entry.country.set(countries)
+            countries = self.cleaned_data['country']
+            entry.country.set(countries)
 
             for item in places_countries_list:
                 if item:
@@ -104,6 +101,7 @@ class EntryCreateForm(forms.ModelForm):
                     place, created = Place.objects.get_or_create(place=place_name.strip(), country=country)
                     entry.place.add(place)
                     entry.country.add(country)
+
         place_name = self.cleaned_data['place'].strip()
         for country in countries:
             place, created = Place.objects.get_or_create(place=place_name, country=country)
@@ -127,6 +125,7 @@ class EntryCreateForm(forms.ModelForm):
 
         if cost and not currency:
             raise forms.ValidationError("Pokud je vyplněná cena, je potřeba vybrat také měnu.")
+
         arrival_date = cleaned_data.get("arrival_date")
         departure_date = cleaned_data.get("departure_date")
 
@@ -145,8 +144,8 @@ class ImageUploadForm(forms.ModelForm):
     image = forms.ImageField(
         widget=forms.ClearableFileInput(attrs={'class': 'form-control'}),
         required=True,
-
     )
+
     description = forms.CharField(
         widget=forms.TextInput(attrs={'class': 'form-control'}),
         required=False

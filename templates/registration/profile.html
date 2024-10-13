@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
 <div class="container mt-2">
@@ -6,7 +7,7 @@
         <div class="col-md-12 d-flex justify-content-between align-items-center">
             <div></div>
             {% if user == user_account %}
-            <a href="{% url 'update_account' %}" class="btn btn-sm btn-secondary"> <i class="fa-solid fa-pen"></i> Edit Profile</a>
+            <a href="{% url 'profile_update' %}" class="btn btn-sm btn-secondary"> <i class="fa-solid fa-pen"></i> Edit Profile</a>
             {% endif %}
         </div>
     </div>

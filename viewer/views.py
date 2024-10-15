@@ -1,15 +1,17 @@
+from django.contrib import messages
 from django.db.models import Max
-from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from django.contrib.auth.models import User
 
 from viewer.forms import EntryCreateForm, ImageUploadForm
-from viewer.models import Entry, Country, Weather, Place, Hashtag, Image
+from viewer.models import Entry, Country, Place, Image
 
 
 def home(request):
     return render(request, "home.html")
+
 
 class EntriesEditView(ListView):
     template_name = "edit_panel.html"
@@ -72,28 +74,32 @@ def entry_list(request):
         'currencies': list(currencies),
     })
 
+
 class EntryCreateView(CreateView):
     template_name = 'entry_form.html'
     form_class = EntryCreateForm
-    success_url = reverse_lazy('entries')
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        return super().form_valid(form)
+        entry = form.save()
+        return redirect(reverse('image_upload', kwargs={'pk': entry.pk}))
+
 
 class EntryUpdateView(UpdateView):
     template_name = 'entry_form.html'
     model = Entry
     form_class = EntryCreateForm
-    success_url = reverse_lazy('entries')
 
     def form_valid(self, form):
-        return super().form_valid(form)
+        entry = form.save()
+        return redirect(reverse('image_upload', kwargs={'pk': entry.pk}))
+
 
 class EntryDeleteView(DeleteView):
     template_name = 'entry_delete.html'
     model = Entry
     success_url = reverse_lazy('entries')
+
 
 class EntryDetailView(DetailView):
     template_name = 'entry.html'
@@ -151,25 +157,6 @@ class EntryDetailView(DetailView):
 
         return context
 
-class ImageUploadView(CreateView):
-    template_name = 'image_upload.html'
-    form_class = ImageUploadForm
-
-    def get_success_url(self):
-        return reverse_lazy('image_upload', kwargs={'pk': self.kwargs['pk']})
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['entry_pk'] = self.kwargs['pk']
-        context['entry_name'] = Entry.objects.get(pk=context['entry_pk']).entry_name
-        return context
-
-    def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.entry = Entry.objects.get(pk=self.kwargs['pk'])
-        self.object.save()
-        return super().form_valid(form)
-
 def search_results(request):
     query = request.GET.get('query')
     if query:
@@ -191,9 +178,38 @@ def search_results(request):
         'query': query
     })
 
+
+class ImageUploadView(CreateView):
+    template_name = 'image_upload.html'
+    form_class = ImageUploadForm
+
+    def get_success_url(self):
+        return reverse_lazy('image_upload', kwargs={'pk': self.kwargs['pk']})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        entry = Entry.objects.get(pk=self.kwargs['pk'])
+        context['entry_pk'] = entry.pk
+        context['entry_name'] = entry.entry_name
+        context['entry'] = entry
+        return context
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.entry = Entry.objects.get(pk=self.kwargs['pk'])
+        self.object.save()
+        messages.success(self.request, 'Image was successfully uploaded!')
+        return super().form_valid(form)
+
+
 class ImageDeleteView(DeleteView):
     template_name = 'image_delete.html'
     model = Image
 
     def get_success_url(self):
-        return reverse_lazy('entry', kwargs={'pk': self.object.entry.pk})
+        return reverse_lazy('image_upload', kwargs={'pk': self.object.entry.pk})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['entry'] = self.object.entry
+        return context

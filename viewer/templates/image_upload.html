@@ -1,14 +1,50 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container d-flex justify-content-center align-items-start vh-100">
-    <div class="card p-4 mt-5" style="width: 400px;">
-        <h3 class="text-center mb-4">Upload image for <a href="{% url 'entry' entry_pk %}">{{ entry_name }}</a></h3>
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
-        <input id="id_submit" type="submit" value="Submit" class="btn btn-primary w-100">
-        </form>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="container d-flex justify-content-center align-items-start">
+        <div class="card p-4 mt-5" style="width: 400px;">
+            <h3 class="text-center mb-4">Upload image for {{ entry_name }}</h3>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="mb-4">The first uploaded image will be used as a preview of your entry. </div>
+                <div class="mb-4">If you do not wish to upload any images, you can just go to your entry. </div>
+                <input id="id_submit" type="submit" value="Upload" class="btn btn-primary w-100">
+                <div class="text-center">
+                    <a href="{% url 'entry' entry_pk %}">Or go to entry</a>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
+
+    <div class="container mt-5">
+        <h4>Uploaded images:</h4>
+        <div class="row">
+            {% for image in entry.image_set.all %}
+                <div class="col-md-3">
+                    <div class="card mb-3">
+                        <div class="d-flex justify-content-between p-2">
+                            <a href="{% url 'image_delete' image.pk %}" class="text-danger">
+                                <i class="fa fa-trash" aria-hidden="true"></i> Delete
+                            </a>
+                        </div>
+                        <img src="{{ image.image.url }}" class="card-img-top" alt="Image">
+                        <div class="card-body">
+                            <p class="card-text">{{ image.description }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No images uploaded yet.</p>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}

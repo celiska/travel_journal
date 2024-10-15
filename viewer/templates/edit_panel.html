@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>All Trips</h1>
+
+{% if entries_list %}
+    <ul>
+        {% for entry in entries_list %}
+            <li>
+                <a href="{% url 'entry' entry.pk %}">{{ entry.entry_name }}</a>
+                    <a href="{% url 'entry_update' entry.pk %}" class="ml-2">
+                        <i class="fa-solid fa-pen"></i>
+                    </a>
+                    <a href="{% url 'entry_delete' entry.pk %}" class="ml-2">
+                        <i class="fa-solid fa-trash"></i>
+                    </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No trips.</p>
+{% endif %}
+{% endblock %}

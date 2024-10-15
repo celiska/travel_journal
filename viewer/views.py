@@ -1,9 +1,8 @@
-from profile import Profile
-
 from django.db.models import Max
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
+from django.contrib.auth.models import User
 
 from viewer.forms import EntryCreateForm, ImageUploadForm
 from viewer.models import Entry, Country, Weather, Place, Hashtag, Image
@@ -12,10 +11,10 @@ from viewer.models import Entry, Country, Weather, Place, Hashtag, Image
 def home(request):
     return render(request, "home.html")
 
-class EntriesList(ListView):
-    template_name = "entries.html"
+class EntriesEditView(ListView):
+    template_name = "edit_panel.html"
     model = Entry
-    context_object_name = 'entries'
+    context_object_name = 'entries_list'
 
 def get_countries_and_places():
     countries = Country.objects.all()
@@ -23,7 +22,7 @@ def get_countries_and_places():
     return countries, places
 
 def entry_list(request):
-    entries = Entry.objects.all()
+    entries = Entry.objects.filter(is_private=False)
 
     countries = Entry.objects.values_list('country__country', flat=True).distinct()
     places = Entry.objects.values_list('place__place', flat=True).distinct()
@@ -174,11 +173,23 @@ class ImageUploadView(CreateView):
 def search_results(request):
     query = request.GET.get('query')
     if query:
-        results = Entry.objects.filter(entry_name__icontains=query) | Entry.objects.filter(description__icontains=query)
+        entry_results = Entry.objects.filter(is_private=False).filter(
+            entry_name__icontains=query
+        ) | Entry.objects.filter(is_private=False).filter(
+            description__icontains=query
+        )
+        user_results = User.objects.filter(username__icontains=query) | User.objects.filter(
+            profile__display_name__icontains=query
+        )
     else:
-        results = Entry.objects.none()
+        entry_results = Entry.objects.none()
+        user_results = User.objects.none()
 
-    return render(request, 'search_results.html', {'results': results, 'query': query})
+    return render(request, 'search_results.html', {
+        'entry_results': entry_results,
+        'user_results': user_results,
+        'query': query
+    })
 
 class ImageDeleteView(DeleteView):
     template_name = 'image_delete.html'

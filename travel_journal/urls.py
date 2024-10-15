@@ -4,8 +4,9 @@ from django.urls import path, include
 from django.views.generic import TemplateView
 
 from travel_journal import settings
-from accounts.views import SignUpView, user_logout, profile_update, profile_view, delete_user
-from viewer.views import home, EntriesList, entry_list, EntryCreateView, EntryDetailView, EntryUpdateView, EntryDeleteView, search_results, ImageUploadView, ImageDeleteView
+from accounts.views import SignUpView, user_logout, profile_update, delete_user, profile_view
+from viewer.views import home, entry_list, EntryCreateView, EntryDetailView, EntryUpdateView, \
+    EntryDeleteView, search_results, ImageUploadView, ImageDeleteView, EntriesEditView
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
@@ -18,6 +19,7 @@ urlpatterns = [
     path('entry/<pk>/update', EntryUpdateView.as_view(), name='entry_update'),
     path('entry/<pk>/delete', EntryDeleteView.as_view(), name='entry_delete'),
     path('entry/<pk>/image_upload', ImageUploadView.as_view(), name='image_upload'),
+    path('entries_edit', EntriesEditView.as_view(), name='edit_panel'),
 
     path('image_delete/<pk>', ImageDeleteView.as_view(), name='image_delete'),
 

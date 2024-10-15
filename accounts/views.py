@@ -77,3 +77,17 @@ def password_change(request):
         form = PasswordChangeForm(request.user)
 
     return render(request, 'registration/password_change.html', {'form': form})
+
+def profile_view(request, username):
+    user_account = User.objects.get(username=username)
+    profile = Profile.objects.get(user=user_account)
+    entries = Entry.objects.filter(author=user_account)
+
+    is_editor_or_superuser = request.user.is_superuser or request.user.groups.filter(name='editor').exists()
+
+    return render(request, 'registration/profile.html', {
+        'user_account': user_account,
+        'profile': profile,
+        'entries': entries,
+        'is_editor_or_superuser': is_editor_or_superuser,
+    })

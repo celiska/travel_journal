@@ -11,19 +11,37 @@
         {% endif %}
     </div>
 
-    <!-- Výsledky hledání -->
-    {% if results %}
+    <!-- Výsledky hledání pro entries -->
+    <h3>Entries</h3>
+    {% if entry_results %}
         <div class="list-group">
-            {% for result in results %}
-                <a href="{% url 'entry' result.pk %}" class="list-group-item list-group-item-action">
-                    <h5 class="mb-1">{{ result.entry_name }}</h5>
-                    <p class="mb-1">{{ result.description|slice:":200" }}...</p>
+            {% for entry in entry_results %}
+                <a href="{% url 'entry' entry.pk %}" class="list-group-item list-group-item-action">
+                    <h5 class="mb-1">{{ entry.entry_name }}</h5>
+                    <p class="mb-1">{{ entry.description|slice:":200" }}...</p>
                 </a>
             {% endfor %}
         </div>
     {% else %}
         <div class="alert alert-warning text-center" role="alert">
-            No results found for "<strong>{{ query }}</strong>". Please try again with a different query.
+            No entries found for "<strong>{{ query }}</strong>".
+        </div>
+    {% endif %}
+
+    <!-- Výsledky hledání pro uživatele -->
+    <h3 class="mt-5">Users</h3>
+    {% if user_results %}
+        <div class="list-group">
+            {% for user in user_results %}
+                <a href="{% url 'profile' user.username %}" class="list-group-item list-group-item-action">
+                    <h5 class="mb-1">{{ user.username }}</h5>
+                    <p class="mb-1">{{ user.profile.display_name }}</p>
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-warning text-center" role="alert">
+            No users found for "<strong>{{ query }}</strong>".
         </div>
     {% endif %}
 </div>

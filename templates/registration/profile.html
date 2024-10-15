@@ -5,9 +5,11 @@
 <div class="container mt-2">
     <div class="row">
         <div class="col-md-12 d-flex justify-content-between align-items-center">
-            <div></div>
             {% if user == user_account %}
-            <a href="{% url 'profile_update' %}" class="btn btn-sm btn-secondary"> <i class="fa-solid fa-pen"></i> Edit Profile</a>
+                {% if is_editor_or_superuser %}
+                    <a href="{% url 'edit_panel' %}" class="btn btn-sm btn-secondary">Edit panel</a>
+                {% endif %}
+                <a href="{% url 'profile_update' %}" class="btn btn-sm btn-secondary"> <i class="fa-solid fa-pen"></i> Edit Profile</a>
             {% endif %}
         </div>
     </div>
@@ -31,7 +33,6 @@
                 <img src="/images/profiles/profile_default.jpg" alt="Default profile picture" class="img-fluid rounded-circle profile_picture">
             {% endif %}
         </div>
-
     </div>
 
     <div class="row mt-5">

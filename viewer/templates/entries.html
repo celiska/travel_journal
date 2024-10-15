@@ -4,9 +4,13 @@
 {% block content %}
 <h1 class="display-4">Popular trips</h1>
 
-<a href="#" class="mb-4" data-toggle="collapse" data-target="#filterForm" aria-expanded="false" aria-controls="filterForm">
-    Show/Hide Filters
-</a>
+<div class="d-flex justify-content-between">
+    <a href="#" class="mb-4" data-toggle="collapse" data-target="#filterForm" aria-expanded="false" aria-controls="filterForm">
+        Show/Hide Filters
+    </a>
+    <a href="{% url 'entries' %}" class="mb-4 text-right">Clear Filter</a>
+</div>
+
 
 
 <!-- Filtrování -->
@@ -55,31 +59,23 @@
                 </select>
             </div>
 
-            <div class="form-group col-md-3">
-                <label for="customRange2" class="form-label">Cost</label>
-                <input
-                    type="range"
-                    name="cost"
-                    class="form-control-range"
-                    min="0"
-                    max="{{ max_cost }}"
-                    value="{{ selected_cost }}"
-                    id="customRange2"
-                    oninput="document.getElementById('rangeValue').innerText = this.value"
-                >
-                <div class="d-flex justify-content-between">
-                    <span>0</span>
-                    <span id="rangeValue">{{ selected_cost }}</span>
-                    <span>{{ max_cost }}</span>
+            <div class="form-group col-md-4 d-flex align-items-end">
+                <div class="w-75 mr-2">
+                    <label for="cost" class="form-label">Cost</label>
+                    <input type="number" name="cost" class="form-control"
+                           value="{{ selected_cost|default_if_none:'' }}"
+                           id="cost"
+                    >
                 </div>
-            </div>
-
-            <div class="form-group col-md-1 mt-4">
-                <select name="currency" id="currency" class="form-control">
-                    {% for currency in currencies %}
-                        <option value="{{ currency }}">{{ currency }}</option>
-                    {% endfor %}
-                </select>
+                <div class="w-25">
+                    <label for="currency" class="form-label">Currency</label>
+                    <select name="currency" id="currency" class="form-control">
+                        <option value="" selected disabled></option>
+                        {% for currency in currencies %}
+                            <option value="{{ currency }}">{{ currency }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
 
             <div class="form-group col-md-2 ml-4">

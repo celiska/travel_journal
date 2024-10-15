@@ -1,4 +1,6 @@
 from django import forms
+from django.core.exceptions import ValidationError
+
 from viewer.models import Entry, Country, Weather, Transport, CURRENCY_CHOICES, Place, Hashtag, RATING_CHOICES, Image
 
 
@@ -120,14 +122,17 @@ class EntryCreateForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        cost = cleaned_data.get("cost")
-        currency = cleaned_data.get("currency")
-
-        if cost and not currency:
-            raise forms.ValidationError("Pokud je vyplněná cena, je potřeba vybrat také měnu.")
-
+        places_countries_data = self.data.get('places_countries', '').strip()
         arrival_date = cleaned_data.get("arrival_date")
         departure_date = cleaned_data.get("departure_date")
+
+        if not places_countries_data:
+            raise ValidationError("Please add at least one place and country.")
+
+        places_countries_list = places_countries_data.split(';')
+        places_countries_list = [item for item in places_countries_list if item]
+
+        cleaned_data['places_countries'] = places_countries_list
 
         if arrival_date and departure_date:
             if departure_date < arrival_date:

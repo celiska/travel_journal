@@ -24,10 +24,10 @@ def get_countries_and_places():
     return countries, places
 
 def entry_list(request):
-    entries = Entry.objects.filter(is_private=False)
+    entries = Entry.objects.filter(is_private=False).distinct()
 
-    countries = Entry.objects.values_list('country__country', flat=True).distinct()
-    places = Entry.objects.values_list('place__place', flat=True).distinct()
+    countries = entries.values_list('country__country', flat=True).distinct()
+    places = entries.values_list('place__place', flat=True).distinct()
     max_cost = entries.aggregate(Max('cost'))['cost__max'] or 0
     currencies = set(entry.currency.strip() for entry in entries)
 
@@ -60,7 +60,6 @@ def entry_list(request):
         entries = entries.filter(weather__type__in=selected_weather)
     if selected_transport:
         entries = entries.filter(transport__type__in=selected_transport)
-
     if hashtags_str:
         hashtags = hashtags_str.split(',')
         entries = entries.filter(hashtag__hashtag__in=hashtags).distinct()

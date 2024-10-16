@@ -106,9 +106,9 @@
                         <p>
                             {% for i in "12345" %}
                                 {% if i|add:"0" <= entry.rating %}
-                                    <span><i class="fa-solid fa-star fa-2xl star-full"></i></span>
+                                    <span><i class="fa-solid fa-star fa-2xl yellow-star"></i></span>
                                 {% else %}
-                                    <span><i class="fa-regular fa-star fa-2xl star-empty"></i></span>
+                                    <span><i class="fa-regular fa-star fa-2xl yellow-star"></i></span>
                                 {% endif %}
                             {% endfor %}
                         </p>
@@ -146,5 +146,4 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/lightbox2@2.11.3/dist/js/lightbox.min.js"></script>
 {% endblock %}

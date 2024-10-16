@@ -18,9 +18,16 @@ footer {
     margin-top: auto;
 }
 
+.footer-line {
+    background: lightgrey;
+}
 .card-img-top {
     height: 200px;
     object-fit: cover;
+}
+
+.password-crd {
+    width: 600px;
 }
 
 .img-entry {
@@ -42,12 +49,17 @@ footer {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.star-empty {
-    color: #FFD43B;
+.custom-crd {
+    width: 400px;
 }
 
-.star-full {
-    color: #FFD43B;
+.profile-bio {
+    word-wrap: break-word;
+    max-width: 100%;
+}
+
+.yellow-star {
+    color: #FFCA0A;
 }
 
 .custom-badge {

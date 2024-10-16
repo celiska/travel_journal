@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load static %}
 
 {% block content %}
 <h1 class="display-4">Popular trips</h1>
@@ -151,9 +150,9 @@
                                     <p class="mb-2">
                                         {% for i in "12345" %}
                                             {% if i|add:"0" <= entry.rating %}
-                                                <span><i class="fa-solid fa-star" style="color: #FFD43B;"></i></span>
+                                                <span><i class="fa-solid fa-star yellow-star"></i></span>
                                             {% else %}
-                                                <span><i class="fa-regular fa-star" style="color: #FFD43B;"></i></span>
+                                                <span><i class="fa-regular fa-star yellow-star"></i></span>
                                             {% endif %}
                                         {% endfor %}
                                     </p>
@@ -172,5 +171,4 @@
     </div>
 </div>
 
-<script src="{% static 'js/hashtags.js' %}"></script>
 {% endblock %}

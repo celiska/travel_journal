@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load static %}
 
 {% block content %}
 <div class="container mt-2">
@@ -24,7 +23,7 @@
     <div class="row mt-4">
         <div class="col-md-7">
             <h4>About me</h4>
-            <p style="word-wrap: break-word; max-width: 100%;">{{ profile.bio }}</p>
+            <p class="profile-bio">{{ profile.bio }}</p>
         </div>
         <div class="col-md-5 text-center">
             {% if profile.profile_picture %}
@@ -52,9 +51,9 @@
                             <p>
                                 {% for i in "12345" %}
                                     {% if i|add:"0" <= entry.rating %}
-                                        <span><i class="fa-solid fa-star" style="color: #FFD43B;"></i></span>
+                                        <span><i class="fa-solid fa-star yellow-star"></i></span>
                                     {% else %}
-                                        <span><i class="fa-regular fa-star" style="color: #FFD43B;"></i></span>
+                                        <span><i class="fa-regular fa-star yellow-star"></i></span>
                                     {% endif %}
                                 {% endfor %}
                             </p>

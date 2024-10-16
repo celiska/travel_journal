@@ -1,6 +1,6 @@
 # TODO
 
-- [ ] Frontend
+- [x] Frontend
   - [x] Navbar
   - [x] Base
   - [x] Footer
@@ -11,14 +11,11 @@
     - [x] Places
     - [x] Transport
 - [x] Add entry page
-- [ ] Add proper form validation 
+- [x] Add proper form validation 
 - [x] Entry detail view
 - [x] Models
-- [ ] Profiles
-- [ ] Tests
-- [x] Separate JavaScript codes into static files
-
-
+- [x] Profiles
+- [x] Tests
 - [x] Separate JavaScript codes into static files
 - [x] Fix images
 - [x] Functional search window (optional)

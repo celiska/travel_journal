@@ -89,6 +89,14 @@ class EntryUpdateView(UpdateView):
     model = Entry
     form_class = EntryCreateForm
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        entry = self.object
+        context['saved_places'] = entry.place.all()
+        context['saved_countries'] = entry.country.all()
+        context['saved_hashtags'] = entry.hashtag.all()
+        return context
+
     def form_valid(self, form):
         entry = form.save()
         return redirect(reverse('image_upload', kwargs={'pk': entry.pk}))

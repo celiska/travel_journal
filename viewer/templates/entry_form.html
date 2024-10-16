@@ -62,7 +62,11 @@
                     </select>
                 </div>
             </div>
-
+        <div class="mt-3 mb-3 d-flex flex-wrap">
+            {% for place in saved_places %}
+                <span class="custom-badge">{{ place.place }} ({{ place.country }})</span>
+            {% endfor %}
+        </div>
             <div id="place-list" class="mt-3 mb-3 d-flex flex-wrap"></div>
             <button type="button" class="btn btn-secondary mt-3" id="add-place-btn">Add Place</button>
         </div>
@@ -137,8 +141,13 @@
                         <input type="text" id="hashtag-input" class="form-control" placeholder="Enter hashtag" maxlength="20">
                         <button type="button" class="btn btn-secondary" id="add-hashtag-btn">Add</button>
                     </div>
-                    <div id="hashtag-list" class="mt-2"></div>
-                    <input type="hidden" name="hashtags" id="hashtags-hidden">
+
+                    <div id="hashtag-list" class="mt-2">
+                        {% for hashtag in saved_hashtags %}
+                            <span class="badge bg-warning mr-2 mb-2">#{{ hashtag.hashtag }}</span>
+                        {% endfor %}
+                    </div>
+                    <input type="hidden" name="hashtags" id="hashtags-hidden" value="{% for hashtag in saved_hashtags %}{{ hashtag.hashtag }}{% if not forloop.last %},{% endif %}{% endfor %}">
                 </div>
 
                 <!-- Rating -->

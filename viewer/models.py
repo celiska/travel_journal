@@ -119,7 +119,7 @@ class Entry(models.Model):
             return duration.days
 
 class Image(models.Model):
-    image = models.ImageField(upload_to="images/", null=False, blank=False)
+    image = models.ImageField(null=False, blank=False)
     description = models.TextField(null=True, blank=True)
     entry = models.ForeignKey(Entry, on_delete=models.CASCADE, null=False, blank=False)
 

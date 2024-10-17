@@ -5,7 +5,7 @@ from django.views.generic import TemplateView
 
 from travel_journal import settings
 from accounts.views import SignUpView, user_logout, profile_update, delete_user, profile_view
-from viewer.views import home, entry_list, EntryCreateView, EntryDetailView, EntryUpdateView, \
+from viewer.views import home, get_filtered_entries, EntryCreateView, EntryDetailView, EntryUpdateView, \
     EntryDeleteView, search_results, ImageUploadView, ImageDeleteView, EntriesEditView
 
 urlpatterns = [
@@ -13,7 +13,7 @@ urlpatterns = [
 
     path('', home, name='home'),
 
-    path('entries/', entry_list, name='entries'),
+    path('entries/', get_filtered_entries, name='entries'),
     path('entries/create', EntryCreateView.as_view(), name='entry_create'),
     path('entry/<pk>', EntryDetailView.as_view(), name='entry'),
     path('entry/<pk>/update', EntryUpdateView.as_view(), name='entry_update'),
@@ -37,5 +37,3 @@ urlpatterns = [
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

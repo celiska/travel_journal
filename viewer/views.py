@@ -18,61 +18,6 @@ class EntriesEditView(ListView):
     model = Entry
     context_object_name = 'entries_list'
 
-def get_countries_and_places():
-    countries = Country.objects.all()
-    places = Place.objects.all()
-    return countries, places
-
-def entry_list(request):
-    entries = Entry.objects.filter(is_private=False).distinct()
-
-    countries = entries.values_list('country__country', flat=True).distinct()
-    places = entries.values_list('place__place', flat=True).distinct()
-    max_cost = entries.aggregate(Max('cost'))['cost__max'] or 0
-    currencies = set(entry.currency.strip() for entry in entries)
-
-    arrival_date = request.GET.get('arrival_date')
-    departure_date = request.GET.get('departure_date')
-    rating = request.GET.get('rating')
-    selected_country = request.GET.get('country')
-    selected_place = request.GET.get('place')
-    selected_cost = request.GET.get('cost')
-    selected_currency = request.GET.get('currency')
-    selected_weather = request.GET.getlist('weather')
-    selected_transport = request.GET.getlist('transport')
-    hashtags_str = request.GET.get('hashtags')
-
-    if arrival_date:
-        entries = entries.filter(arrival_date=arrival_date)
-    if departure_date:
-        entries = entries.filter(departure_date=departure_date)
-    if rating:
-        entries = entries.filter(rating=rating)
-    if selected_country:
-        entries = entries.filter(country__country=selected_country)
-    if selected_place:
-        entries = entries.filter(place__place=selected_place)
-    if selected_cost:
-        entries = entries.filter(cost__lte=selected_cost)
-    if selected_currency:
-        entries = entries.filter(currency=selected_currency)
-    if selected_weather:
-        entries = entries.filter(weather__type__in=selected_weather)
-    if selected_transport:
-        entries = entries.filter(transport__type__in=selected_transport)
-    if hashtags_str:
-        hashtags = hashtags_str.split(',')
-        entries = entries.filter(hashtag__hashtag__in=hashtags).distinct()
-
-    return render(request, 'entries.html', {
-        'entries': entries,
-        'countries': countries,
-        'places': places,
-        'max_cost': max_cost,
-        'selected_cost': selected_cost,
-        'currencies': list(currencies),
-    })
-
 
 class EntryCreateView(CreateView):
     template_name = 'entry_form.html'
@@ -163,6 +108,61 @@ class EntryDetailView(DetailView):
         context['transport_icon_list'] = transport_icon_list
 
         return context
+
+def get_countries_and_places():
+    countries = Country.objects.all()
+    places = Place.objects.all()
+    return countries, places
+
+def get_filtered_entries(request):
+    entries = Entry.objects.filter(is_private=False).distinct()
+
+    countries = entries.values_list('country__country', flat=True).distinct()
+    places = entries.values_list('place__place', flat=True).distinct()
+    max_cost = entries.aggregate(Max('cost'))['cost__max'] or 0
+    currencies = set(entry.currency.strip() for entry in entries)
+
+    arrival_date = request.GET.get('arrival_date')
+    departure_date = request.GET.get('departure_date')
+    rating = request.GET.get('rating')
+    selected_country = request.GET.get('country')
+    selected_place = request.GET.get('place')
+    selected_cost = request.GET.get('cost')
+    selected_currency = request.GET.get('currency')
+    selected_weather = request.GET.getlist('weather')
+    selected_transport = request.GET.getlist('transport')
+    hashtags_str = request.GET.get('hashtags')
+
+    if arrival_date:
+        entries = entries.filter(arrival_date=arrival_date)
+    if departure_date:
+        entries = entries.filter(departure_date=departure_date)
+    if rating:
+        entries = entries.filter(rating=rating)
+    if selected_country:
+        entries = entries.filter(country__country=selected_country)
+    if selected_place:
+        entries = entries.filter(place__place=selected_place)
+    if selected_cost:
+        entries = entries.filter(cost__lte=selected_cost)
+    if selected_currency:
+        entries = entries.filter(currency=selected_currency)
+    if selected_weather:
+        entries = entries.filter(weather__type__in=selected_weather)
+    if selected_transport:
+        entries = entries.filter(transport__type__in=selected_transport)
+    if hashtags_str:
+        hashtags = hashtags_str.split(',')
+        entries = entries.filter(hashtag__hashtag__in=hashtags).distinct()
+
+    return render(request, 'entries.html', {
+        'entries': entries,
+        'countries': countries,
+        'places': places,
+        'max_cost': max_cost,
+        'selected_cost': selected_cost,
+        'currencies': list(currencies),
+    })
 
 def search_results(request):
     query = request.GET.get('query')

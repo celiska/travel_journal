@@ -1,6 +1,6 @@
+from datetime import date
 from django import forms
 from django.core.exceptions import ValidationError
-
 from viewer.models import Entry, Country, Weather, Transport, CURRENCY_CHOICES, Place, Hashtag, RATING_CHOICES, Image
 
 
@@ -16,11 +16,11 @@ class EntryCreateForm(forms.ModelForm):
     )
 
     entry_name = forms.CharField(
-        widget=forms.TextInput(attrs={'class': 'form-control', 'maxlength': '35'})
+        widget=forms.TextInput(attrs={'class': 'form-control ', 'maxlength': '50'})
     )
 
     description = forms.CharField(
-        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'maxlength': '300'})
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'maxlength': '1200'})
     )
 
     country = forms.ModelMultipleChoiceField(
@@ -91,10 +91,9 @@ class EntryCreateForm(forms.ModelForm):
             entry.save()
 
         places_countries_data = self.data.get('places_countries', '')
+
         if places_countries_data:
             places_countries_list = places_countries_data.split(';')
-            countries = self.cleaned_data['country']
-            entry.country.set(countries)
 
             for item in places_countries_list:
                 if item:
@@ -104,19 +103,22 @@ class EntryCreateForm(forms.ModelForm):
                     entry.place.add(place)
                     entry.country.add(country)
 
-        place_name = self.cleaned_data['place'].strip()
-        for country in countries:
-            place, created = Place.objects.get_or_create(place=place_name, country=country)
-            entry.place.add(place)
+        place_name = self.cleaned_data.get('place', '').strip()
+        countries = self.cleaned_data.get('country', None)
+
+        if place_name and countries:
+            for country in countries:
+                place, created = Place.objects.get_or_create(place=place_name, country=country)
+                entry.place.add(place)
 
         hashtags_str = self.cleaned_data.get('hashtags', '')
         if hashtags_str:
             hashtags = [Hashtag.objects.get_or_create(hashtag=tag.strip())[0] for tag in hashtags_str.split(',') if
                         tag.strip()]
-            entry.hashtag.add(*hashtags)
+            entry.hashtag.set(hashtags)
 
-        entry.weather.set(self.cleaned_data['weather'])
-        entry.transport.set(self.cleaned_data['transport'])
+        entry.weather.set(self.cleaned_data.get('weather', []))
+        entry.transport.set(self.cleaned_data.get('transport', []))
 
         return entry
 
@@ -126,7 +128,7 @@ class EntryCreateForm(forms.ModelForm):
         arrival_date = cleaned_data.get("arrival_date")
         departure_date = cleaned_data.get("departure_date")
 
-        if not places_countries_data:
+        if not self.instance.pk and not places_countries_data:
             raise ValidationError("Please add at least one place and country.")
 
         places_countries_list = places_countries_data.split(';')
@@ -137,6 +139,10 @@ class EntryCreateForm(forms.ModelForm):
         if arrival_date and departure_date:
             if departure_date < arrival_date:
                 raise forms.ValidationError("The departure date cannot be earlier than the arrival date.")
+        if arrival_date and arrival_date > date.today():
+            raise forms.ValidationError("The arrival date cannot be in the future.")
+        if departure_date and departure_date > date.today():
+            raise forms.ValidationError("The departure date cannot be in the future.")
 
         return cleaned_data
 

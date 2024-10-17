@@ -115,7 +115,7 @@ class Entry(models.Model):
 
     def calculate_duration(self):
         if self.arrival_date and self.departure_date:
-            duration = self.arrival_date - self.departure_date
+            duration = self.departure_date - self.arrival_date
             return duration.days
 
 class Image(models.Model):

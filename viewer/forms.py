@@ -128,6 +128,13 @@ class EntryCreateForm(forms.ModelForm):
         arrival_date = cleaned_data.get("arrival_date")
         departure_date = cleaned_data.get("departure_date")
 
+        if arrival_date and arrival_date > date.today():
+            raise forms.ValidationError("The arrival date cannot be in the future.")
+        if departure_date and departure_date > date.today():
+            raise forms.ValidationError("The departure date cannot be in the future.")
+        if arrival_date and departure_date:
+            if departure_date < arrival_date:
+                raise forms.ValidationError("The departure date cannot be earlier than the arrival date.")
         if not self.instance.pk and not places_countries_data:
             raise ValidationError("Please add at least one place and country.")
 
@@ -135,14 +142,6 @@ class EntryCreateForm(forms.ModelForm):
         places_countries_list = [item for item in places_countries_list if item]
 
         cleaned_data['places_countries'] = places_countries_list
-
-        if arrival_date and departure_date:
-            if departure_date < arrival_date:
-                raise forms.ValidationError("The departure date cannot be earlier than the arrival date.")
-        if arrival_date and arrival_date > date.today():
-            raise forms.ValidationError("The arrival date cannot be in the future.")
-        if departure_date and departure_date > date.today():
-            raise forms.ValidationError("The departure date cannot be in the future.")
 
         return cleaned_data
 

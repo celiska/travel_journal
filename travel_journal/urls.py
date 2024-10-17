@@ -15,7 +15,7 @@ urlpatterns = [
 
     path('entries/', get_filtered_entries, name='entries'),
     path('entries/create', EntryCreateView.as_view(), name='entry_create'),
-    path('entry/<pk>', EntryDetailView.as_view(), name='entry'),
+    path('entry/<pk>', EntryDetailView.as_view(), name='entry_detail'),
     path('entry/<pk>/update', EntryUpdateView.as_view(), name='entry_update'),
     path('entry/<pk>/delete', EntryDeleteView.as_view(), name='entry_delete'),
     path('entry/<pk>/image_upload', ImageUploadView.as_view(), name='image_upload'),

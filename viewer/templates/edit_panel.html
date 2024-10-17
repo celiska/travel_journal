@@ -7,7 +7,7 @@
     <ul>
         {% for entry in entries_list %}
             <li>
-                <a href="{% url 'entry' entry.pk %}">{{ entry.entry_name }}</a>
+                <a href="{% url 'entry_detail' entry.pk %}">{{ entry.entry_name }}</a>
                     <a href="{% url 'entry_update' entry.pk %}" class="ml-2">
                         <i class="fa-solid fa-pen"></i>
                     </a>

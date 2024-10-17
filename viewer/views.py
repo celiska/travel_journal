@@ -54,7 +54,7 @@ class EntryDeleteView(DeleteView):
 
 
 class EntryDetailView(DetailView):
-    template_name = 'entry.html'
+    template_name = 'entry_detail.html'
     model = Entry
     context_object_name = 'entry'
 

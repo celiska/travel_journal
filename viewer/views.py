@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Max
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
@@ -19,7 +20,7 @@ class EntriesEditView(ListView):
     context_object_name = 'entries_list'
 
 
-class EntryCreateView(CreateView):
+class EntryCreateView(LoginRequiredMixin, CreateView):
     template_name = 'entry_form.html'
     form_class = EntryCreateForm
 
@@ -29,10 +30,14 @@ class EntryCreateView(CreateView):
         return redirect(reverse('image_upload', kwargs={'pk': entry.pk}))
 
 
-class EntryUpdateView(UpdateView):
+class EntryUpdateView(UserPassesTestMixin, UpdateView):
     template_name = 'entry_form.html'
     model = Entry
     form_class = EntryCreateForm
+
+    def test_func(self):
+        entry = self.get_object()
+        return entry.author == self.request.user
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -47,10 +52,14 @@ class EntryUpdateView(UpdateView):
         return redirect(reverse('image_upload', kwargs={'pk': entry.pk}))
 
 
-class EntryDeleteView(DeleteView):
+class EntryDeleteView(UserPassesTestMixin, DeleteView):
     template_name = 'entry_delete.html'
     model = Entry
     success_url = reverse_lazy('entries')
+
+    def test_func(self):
+        entry = self.get_object()
+        return entry.author == self.request.user
 
 
 class EntryDetailView(DetailView):
@@ -186,9 +195,13 @@ def search_results(request):
     })
 
 
-class ImageUploadView(CreateView):
+class ImageUploadView(UserPassesTestMixin, CreateView):
     template_name = 'image_upload.html'
     form_class = ImageUploadForm
+
+    def test_func(self):
+        entry = Entry.objects.get(pk=self.kwargs['pk'])
+        return entry.author == self.request.user
 
     def get_success_url(self):
         return reverse_lazy('image_upload', kwargs={'pk': self.kwargs['pk']})
@@ -209,9 +222,13 @@ class ImageUploadView(CreateView):
         return super().form_valid(form)
 
 
-class ImageDeleteView(DeleteView):
+class ImageDeleteView(UserPassesTestMixin, DeleteView):
     template_name = 'image_delete.html'
     model = Image
+
+    def test_func(self):
+        entry = Entry.objects.get(pk=self.kwargs['pk'])
+        return entry.author == self.request.user
 
     def get_success_url(self):
         return reverse_lazy('image_upload', kwargs={'pk': self.object.entry.pk})

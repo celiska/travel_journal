@@ -14,10 +14,13 @@ def home(request):
     return render(request, "home.html")
 
 
-class EntriesEditView(ListView):
+class EntriesEditView(UserPassesTestMixin, ListView):
     template_name = "edit_panel.html"
     model = Entry
     context_object_name = 'entries_list'
+
+    def test_func(self):
+        return self.request.user.is_staff
 
 
 class EntryCreateView(LoginRequiredMixin, CreateView):
@@ -37,7 +40,7 @@ class EntryUpdateView(UserPassesTestMixin, UpdateView):
 
     def test_func(self):
         entry = self.get_object()
-        return entry.author == self.request.user
+        return entry.author == self.request.user or self.request.user.is_staff
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -59,7 +62,7 @@ class EntryDeleteView(UserPassesTestMixin, DeleteView):
 
     def test_func(self):
         entry = self.get_object()
-        return entry.author == self.request.user
+        return entry.author == self.request.user or self.request.user.is_staff
 
 
 class EntryDetailView(DetailView):
@@ -228,7 +231,7 @@ class ImageDeleteView(UserPassesTestMixin, DeleteView):
 
     def test_func(self):
         entry = Entry.objects.get(pk=self.kwargs['pk'])
-        return entry.author == self.request.user
+        return entry.author == self.request.user or self.request.user.is_staff
 
     def get_success_url(self):
         return reverse_lazy('image_upload', kwargs={'pk': self.object.entry.pk})

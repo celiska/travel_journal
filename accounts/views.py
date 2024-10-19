@@ -76,9 +76,12 @@ def password_change(request):
 def profile_view(request, username):
     user_account = User.objects.get(username=username)
     profile = Profile.objects.get(user=user_account)
-    entries = Entry.objects.filter(author=user_account)
-
     is_editor_or_superuser = request.user.is_superuser or request.user.groups.filter(name='editor').exists()
+
+    if user_account == request.user or is_editor_or_superuser:
+        entries = Entry.objects.filter(author=user_account)
+    else:
+        entries = Entry.objects.filter(author=user_account, is_private=False)
 
     return render(request, 'registration/profile.html', {
         'user_account': user_account,

@@ -66,11 +66,15 @@ class EntryDeleteView(UserPassesTestMixin, DeleteView):
         is_editor_or_superuser = self.request.user.is_superuser or self.request.user.groups.filter(name='editor').exists()
         return entry.author == self.request.user or is_editor_or_superuser
 
-
-class EntryDetailView(DetailView):
+class EntryDetailView(UserPassesTestMixin, DetailView):
     template_name = 'entry.html'
     model = Entry
     context_object_name = 'entry'
+
+    def test_func(self):
+        entry = self.get_object()
+        is_editor_or_superuser = self.request.user.is_superuser or self.request.user.groups.filter(name='editor').exists()
+        return not entry.is_private or entry.author == self.request.user or is_editor_or_superuser
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

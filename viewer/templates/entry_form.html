@@ -1,5 +1,13 @@
 {% extends "base.html" %}
 
+{% block title %}
+{% if request.resolver_match.view_name == "entry_update" %}
+    Edit Entry | Travel Journal
+{% else %}
+    Create New Entry | Travel Journal
+{% endif %}
+{% endblock %}
+
 {% block content %}
 <div class="container my-5">
 

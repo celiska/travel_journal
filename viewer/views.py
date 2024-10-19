@@ -20,7 +20,7 @@ class EntriesEditView(UserPassesTestMixin, ListView):
     context_object_name = 'entries_list'
 
     def test_func(self):
-        return self.request.user.is_staff
+        return self.request.user.is_superuser or self.request.user.groups.filter(name='editor').exists()
 
 
 class EntryCreateView(LoginRequiredMixin, CreateView):
@@ -40,7 +40,8 @@ class EntryUpdateView(UserPassesTestMixin, UpdateView):
 
     def test_func(self):
         entry = self.get_object()
-        return entry.author == self.request.user or self.request.user.is_staff
+        is_editor_or_superuser = self.request.user.is_superuser or self.request.user.groups.filter(name='editor').exists()
+        return entry.author == self.request.user or is_editor_or_superuser
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -62,7 +63,8 @@ class EntryDeleteView(UserPassesTestMixin, DeleteView):
 
     def test_func(self):
         entry = self.get_object()
-        return entry.author == self.request.user or self.request.user.is_staff
+        is_editor_or_superuser = self.request.user.is_superuser or self.request.user.groups.filter(name='editor').exists()
+        return entry.author == self.request.user or is_editor_or_superuser
 
 
 class EntryDetailView(DetailView):
@@ -204,7 +206,8 @@ class ImageUploadView(UserPassesTestMixin, CreateView):
 
     def test_func(self):
         entry = Entry.objects.get(pk=self.kwargs['pk'])
-        return entry.author == self.request.user
+        is_editor_or_superuser = self.request.user.is_superuser or self.request.user.groups.filter(name='editor').exists()
+        return entry.author == is_editor_or_superuser
 
     def get_success_url(self):
         return reverse_lazy('image_upload', kwargs={'pk': self.kwargs['pk']})
@@ -231,7 +234,8 @@ class ImageDeleteView(UserPassesTestMixin, DeleteView):
 
     def test_func(self):
         entry = Entry.objects.get(pk=self.kwargs['pk'])
-        return entry.author == self.request.user or self.request.user.is_staff
+        is_editor_or_superuser = self.request.user.is_superuser or self.request.user.groups.filter(name='editor').exists()
+        return entry.author == self.request.user or is_editor_or_superuser
 
     def get_success_url(self):
         return reverse_lazy('image_upload', kwargs={'pk': self.object.entry.pk})

@@ -49,11 +49,6 @@ def profile_update(request):
         profile_form = ProfileUpdateForm(instance=request.user.profile)
         return render(request, 'registration/update.html', {'user_form': user_form, 'profile_form': profile_form})
 
-def profile_view(request, username):
-    user_account = User.objects.get(username=username)
-    profile = Profile.objects.get(user__username=username)
-    entries = Entry.objects.filter(author=user_account)
-    return render(request, 'registration/profile.html', {'user_account': user_account, 'profile': profile, 'entries': entries})
 
 @login_required
 def delete_user(request):
@@ -81,9 +76,12 @@ def password_change(request):
 def profile_view(request, username):
     user_account = User.objects.get(username=username)
     profile = Profile.objects.get(user=user_account)
-    entries = Entry.objects.filter(author=user_account)
-
     is_editor_or_superuser = request.user.is_superuser or request.user.groups.filter(name='editor').exists()
+
+    if user_account == request.user or is_editor_or_superuser:
+        entries = Entry.objects.filter(author=user_account)
+    else:
+        entries = Entry.objects.filter(author=user_account, is_private=False)
 
     return render(request, 'registration/profile.html', {
         'user_account': user_account,

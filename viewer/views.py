@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Max
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
@@ -13,13 +14,16 @@ def home(request):
     return render(request, "home.html")
 
 
-class EntriesEditView(ListView):
+class EntriesEditView(UserPassesTestMixin, ListView):
     template_name = "edit_panel.html"
     model = Entry
     context_object_name = 'entries_list'
 
+    def test_func(self):
+        return self.request.user.is_superuser or self.request.user.groups.filter(name='editor').exists()
 
-class EntryCreateView(CreateView):
+
+class EntryCreateView(LoginRequiredMixin, CreateView):
     template_name = 'entry_form.html'
     form_class = EntryCreateForm
 
@@ -29,10 +33,15 @@ class EntryCreateView(CreateView):
         return redirect(reverse('image_upload', kwargs={'pk': entry.pk}))
 
 
-class EntryUpdateView(UpdateView):
+class EntryUpdateView(UserPassesTestMixin, UpdateView):
     template_name = 'entry_form.html'
     model = Entry
     form_class = EntryCreateForm
+
+    def test_func(self):
+        entry = self.get_object()
+        is_editor_or_superuser = self.request.user.is_superuser or self.request.user.groups.filter(name='editor').exists()
+        return entry.author == self.request.user or is_editor_or_superuser
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -47,16 +56,25 @@ class EntryUpdateView(UpdateView):
         return redirect(reverse('image_upload', kwargs={'pk': entry.pk}))
 
 
-class EntryDeleteView(DeleteView):
+class EntryDeleteView(UserPassesTestMixin, DeleteView):
     template_name = 'entry_delete.html'
     model = Entry
     success_url = reverse_lazy('entries')
 
+    def test_func(self):
+        entry = self.get_object()
+        is_editor_or_superuser = self.request.user.is_superuser or self.request.user.groups.filter(name='editor').exists()
+        return entry.author == self.request.user or is_editor_or_superuser
 
-class EntryDetailView(DetailView):
+class EntryDetailView(UserPassesTestMixin, DetailView):
     template_name = 'entry_detail.html'
     model = Entry
     context_object_name = 'entry'
+
+    def test_func(self):
+        entry = self.get_object()
+        is_editor_or_superuser = self.request.user.is_superuser or self.request.user.groups.filter(name='editor').exists()
+        return not entry.is_private or entry.author == self.request.user or is_editor_or_superuser
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -186,9 +204,14 @@ def search_results(request):
     })
 
 
-class ImageUploadView(CreateView):
+class ImageUploadView(UserPassesTestMixin, CreateView):
     template_name = 'image_upload.html'
     form_class = ImageUploadForm
+
+    def test_func(self):
+        entry = Entry.objects.get(pk=self.kwargs['pk'])
+        is_editor_or_superuser = self.request.user.is_superuser or self.request.user.groups.filter(name='editor').exists()
+        return entry.author == is_editor_or_superuser
 
     def get_success_url(self):
         return reverse_lazy('image_upload', kwargs={'pk': self.kwargs['pk']})
@@ -209,9 +232,14 @@ class ImageUploadView(CreateView):
         return super().form_valid(form)
 
 
-class ImageDeleteView(DeleteView):
+class ImageDeleteView(UserPassesTestMixin, DeleteView):
     template_name = 'image_delete.html'
     model = Image
+
+    def test_func(self):
+        entry = Entry.objects.get(pk=self.kwargs['pk'])
+        is_editor_or_superuser = self.request.user.is_superuser or self.request.user.groups.filter(name='editor').exists()
+        return entry.author == self.request.user or is_editor_or_superuser
 
     def get_success_url(self):
         return reverse_lazy('image_upload', kwargs={'pk': self.object.entry.pk})

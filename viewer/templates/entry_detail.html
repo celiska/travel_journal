@@ -148,6 +148,9 @@
             {% endfor %}
         </div>
     </div>
+    <div class="container text-center">
+        <a class="btn btn-secondary" href="{% url 'image_upload' entry.pk %}">Manage images</a>
+    </div>
 </div>
 
 {% endblock %}

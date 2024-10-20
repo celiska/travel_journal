@@ -211,7 +211,7 @@ class ImageUploadView(UserPassesTestMixin, CreateView):
     def test_func(self):
         entry = Entry.objects.get(pk=self.kwargs['pk'])
         is_editor_or_superuser = self.request.user.is_superuser or self.request.user.groups.filter(name='editor').exists()
-        return entry.author == is_editor_or_superuser
+        return entry.author == self.request.user or is_editor_or_superuser
 
     def get_success_url(self):
         return reverse_lazy('image_upload', kwargs={'pk': self.kwargs['pk']})

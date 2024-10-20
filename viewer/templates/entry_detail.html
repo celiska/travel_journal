@@ -148,9 +148,11 @@
             {% endfor %}
         </div>
     </div>
+    {% if request.user == entry.author %}
     <div class="container text-center">
         <a class="btn btn-secondary" href="{% url 'image_upload' entry.pk %}">Manage images</a>
     </div>
+    {% endif %}
 </div>
 
 {% endblock %}

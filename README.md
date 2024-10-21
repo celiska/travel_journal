@@ -1,5 +1,5 @@
 # Úvod
-**Travel Journal** umožňuje uživatelům vytvářet, spravovat a 
+**TripTrack** umožňuje uživatelům vytvářet, spravovat a 
 procházet cestovní záznamy. Uživatelé mohou zaznamenávat své cestovatelské zážitky, přidávat fotografie a hledat 
 inspiraci pro další cesty pomocí filtrování podle různých kritérií, jako jsou náklady, počasí, doprava,  hashtagy 
 a další.
@@ -40,7 +40,7 @@ na **Edit profile** na stránce tvého profilu
 - [x] Entry detail view
 - [x] Models
 - [x] Profiles
-- [ ] Tests
+- [x] Tests
 - [x] Separate JavaScript codes into static files
 - [x] Fix images
 - [x] Functional search window (optional)

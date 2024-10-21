@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
 
-from travel_journal import settings
+from triptrack import settings
 from accounts.views import SignUpView, user_logout, profile_update, delete_user, profile_view
 from viewer.views import home, get_filtered_entries, EntryCreateView, EntryDetailView, EntryUpdateView, \
     EntryDeleteView, search_results, ImageUploadView, ImageDeleteView, EntriesEditView

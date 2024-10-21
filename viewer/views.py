@@ -19,7 +19,9 @@ class EntriesEditView(UserPassesTestMixin, ListView):
     model = Entry
     context_object_name = 'entries_list'
 
+
     def test_func(self):
+        """Page will be shown only to users with editor privileges or to administrators"""
         return self.request.user.is_superuser or self.request.user.groups.filter(name='editor').exists()
 
 
@@ -28,6 +30,9 @@ class EntryCreateView(LoginRequiredMixin, CreateView):
     form_class = EntryCreateForm
 
     def form_valid(self, form):
+        """Upon receiving a valid post request, the current user will be added to the new entry's author field.
+        The user will then be directed to upload images
+        """
         form.instance.author = self.request.user
         entry = form.save()
         return redirect(reverse('image_upload', kwargs={'pk': entry.pk}))
@@ -39,11 +44,13 @@ class EntryUpdateView(UserPassesTestMixin, UpdateView):
     form_class = EntryCreateForm
 
     def test_func(self):
+        """Page will only be shown to the entry's author or to users with editor privileges"""
         entry = self.get_object()
         is_editor_or_superuser = self.request.user.is_superuser or self.request.user.groups.filter(name='editor').exists()
         return entry.author == self.request.user or is_editor_or_superuser
 
     def get_context_data(self, **kwargs):
+        """This allows already existing places and hashtags to show up on the update page"""
         context = super().get_context_data(**kwargs)
         entry = self.object
         context['saved_places'] = entry.place.all()
@@ -52,6 +59,7 @@ class EntryUpdateView(UserPassesTestMixin, UpdateView):
         return context
 
     def form_valid(self, form):
+        """Upon successful update, the image upload page will be shown"""
         entry = form.save()
         return redirect(reverse('image_upload', kwargs={'pk': entry.pk}))
 
@@ -62,6 +70,7 @@ class EntryDeleteView(UserPassesTestMixin, DeleteView):
     success_url = reverse_lazy('entries')
 
     def test_func(self):
+        """Page will only be shown to the entry's author or to users with editor privileges"""
         entry = self.get_object()
         is_editor_or_superuser = self.request.user.is_superuser or self.request.user.groups.filter(name='editor').exists()
         return entry.author == self.request.user or is_editor_or_superuser
@@ -72,6 +81,7 @@ class EntryDetailView(UserPassesTestMixin, DetailView):
     context_object_name = 'entry'
 
     def test_func(self):
+        """Entries marked as private will only be shown to the entry's author or to users with editor privileges"""
         entry = self.get_object()
         is_editor_or_superuser = self.request.user.is_superuser or self.request.user.groups.filter(name='editor').exists()
         return not entry.is_private or entry.author == self.request.user or is_editor_or_superuser
@@ -80,11 +90,13 @@ class EntryDetailView(UserPassesTestMixin, DetailView):
         context = super().get_context_data(**kwargs)
         entry = self.object
 
+        # If an entry has both an arrival and departure date, the duration of the trip is calculated
         if entry.arrival_date and entry.departure_date:
             duration = (entry.departure_date - entry.arrival_date).days
         else:
             duration = None
 
+        # FontAwesome icons to be shown for each weather and transport selection
         weather_icons = {
             "overcast": "cloud",
             "rain": "cloud-rain",
@@ -133,6 +145,7 @@ def get_countries_and_places():
     return countries, places
 
 def get_filtered_entries(request):
+    """Used by the filter function in the 'view trips' view"""
     entries = Entry.objects.filter(is_private=False).distinct()
 
     countries = entries.values_list('country__country', flat=True).distinct()
@@ -209,14 +222,17 @@ class ImageUploadView(UserPassesTestMixin, CreateView):
     form_class = ImageUploadForm
 
     def test_func(self):
+        """Page will only be shown to the entry's author or to users with editor privileges"""
         entry = Entry.objects.get(pk=self.kwargs['pk'])
         is_editor_or_superuser = self.request.user.is_superuser or self.request.user.groups.filter(name='editor').exists()
         return entry.author == self.request.user or is_editor_or_superuser
 
     def get_success_url(self):
+        """Upon upload, user will stay on the upload page to upload more photos"""
         return reverse_lazy('image_upload', kwargs={'pk': self.kwargs['pk']})
 
     def get_context_data(self, **kwargs):
+        """Shows data relating to the entry associated with the images being uploaded"""
         context = super().get_context_data(**kwargs)
         entry = Entry.objects.get(pk=self.kwargs['pk'])
         context['entry_pk'] = entry.pk
@@ -225,6 +241,7 @@ class ImageUploadView(UserPassesTestMixin, CreateView):
         return context
 
     def form_valid(self, form):
+        """Upon successful upload, the new image will be associated with the entry specified by the URL"""
         self.object = form.save(commit=False)
         self.object.entry = Entry.objects.get(pk=self.kwargs['pk'])
         self.object.save()
@@ -237,14 +254,17 @@ class ImageDeleteView(UserPassesTestMixin, DeleteView):
     model = Image
 
     def test_func(self):
+        """Page will only be shown to the entry's author or to users with editor privileges"""
         entry = Entry.objects.get(pk=self.kwargs['pk'])
         is_editor_or_superuser = self.request.user.is_superuser or self.request.user.groups.filter(name='editor').exists()
         return entry.author == self.request.user or is_editor_or_superuser
 
     def get_success_url(self):
+        """Upon successful upload, user will be returned to the image upload page"""
         return reverse_lazy('image_upload', kwargs={'pk': self.object.entry.pk})
 
     def get_context_data(self, **kwargs):
+        """Used for the 'Back' button linking to the entry's image upload page"""
         context = super().get_context_data(**kwargs)
         context['entry'] = self.object.entry
         return context

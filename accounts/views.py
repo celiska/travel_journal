@@ -20,8 +20,8 @@ class SignUpView(CreateView):
     form_class = SignUpForm
     success_url = reverse_lazy('home')
 
-    # Login user automatically after signup
     def form_valid(self, form):
+        """Login user automatically after signup"""
         form.save()
         username = self.request.POST['username']
         password = self.request.POST['password1']
@@ -36,6 +36,7 @@ def user_logout(request):
 
 @login_required
 def profile_update(request):
+    """Profile update view contains two forms, for the User model and the linked Profile model"""
     if request.method == 'POST':
         user_form = UserUpdateForm(request.POST, instance=request.user)
         profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
@@ -78,6 +79,7 @@ def profile_view(request, username):
     profile = Profile.objects.get(user=user_account)
     is_editor_or_superuser = request.user.is_superuser or request.user.groups.filter(name='editor').exists()
 
+    # Private entries will only be shown on profiles to their authors or to users with editor privileges
     if user_account == request.user or is_editor_or_superuser:
         entries = Entry.objects.filter(author=user_account)
     else:

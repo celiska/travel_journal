@@ -14,7 +14,7 @@ Delete Entry | TripTrack
                 <p>Are you sure you want to delete your entry, <strong>{{ entry.entry_name }}</strong>? This action cannot be taken back. </p>
             </div>
             <div class="d-flex justify-content-between">
-                <a href="{% url 'entry' entry.pk %}" class="btn btn-outline-dark w-100 me-2">Back</a>
+                <a href="{% url 'entry_detail' entry.pk %}" class="btn btn-outline-dark w-100 me-2">Back</a>
                 <input id="id_submit" type="submit" value="Yes" class="btn btn-danger w-100">
             </div>
 

@@ -20,7 +20,7 @@ Results for "{{ query }}" | TripTrack
     {% if entry_results %}
         <div class="list-group">
             {% for entry in entry_results %}
-                <a href="{% url 'entry' entry.pk %}" class="list-group-item list-group-item-action">
+                <a href="{% url 'entry_detail' entry.pk %}" class="list-group-item list-group-item-action">
                     <h5 class="mb-1">{{ entry.entry_name }}</h5>
                     <p class="mb-1">{{ entry.description|slice:":200" }}...</p>
                 </a>

@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView
 from django.views.generic import CreateView, UpdateView, DeleteView
@@ -75,7 +75,10 @@ def password_change(request):
     return render(request, 'registration/password_change.html', {'form': form})
 
 def profile_view(request, username):
-    user_account = User.objects.get(username=username)
+    try:
+        user_account = User.objects.get(username=username)
+    except User.DoesNotExist:
+        raise Http404('User does not exist')
     profile = Profile.objects.get(user=user_account)
     is_editor_or_superuser = request.user.is_superuser or request.user.groups.filter(name='editor').exists()
 

@@ -255,7 +255,8 @@ class ImageDeleteView(UserPassesTestMixin, DeleteView):
 
     def test_func(self):
         """Page will only be shown to the entry's author or to users with editor privileges"""
-        entry = Entry.objects.get(pk=self.kwargs['pk'])
+        image = self.get_object()
+        entry = Entry.objects.get(pk=image.entry.pk)
         is_editor_or_superuser = self.request.user.is_superuser or self.request.user.groups.filter(name='editor').exists()
         return entry.author == self.request.user or is_editor_or_superuser
 

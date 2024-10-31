@@ -23,25 +23,3 @@ na **Edit profile** na stránce tvého profilu
 
 ![database_diagram.png](files%2Fdatabase_diagram.png)
 
-### TODO
-
-- [x] Frontend
-  - [x] Navbar
-  - [x] Base
-  - [x] Footer
-  - [x] Search page
-    - [x] Filtering for weather
-    - [x] cost & currency
-    - [x] Hashtags
-    - [x] Places
-    - [x] Transport
-- [x] Add entry page
-- [x] Add proper form validation 
-- [x] Entry detail view
-- [x] Models
-- [x] Profiles
-- [x] Tests
-- [x] Separate JavaScript codes into static files
-- [x] Fix images
-- [x] Functional search window (optional)
-- [x] Fill out readme.md file

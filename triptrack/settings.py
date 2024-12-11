@@ -26,7 +26,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['https://travel-journal-7s2w.onrender.com']
+ALLOWED_HOSTS = ['travel-journal-7s2w.onrender.com']
 
 
 # Application definition

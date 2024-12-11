@@ -7,3 +7,9 @@ django-dump-load-utf8==0.0.4
 gunicorn==23.0.0
 dj-database-url==2.3.0
 psycopg2-binary==2.9.10
+click==8.1.7
+colorama==0.4.6
+h11==0.14.0
+uvicorn==0.32.1
+brotli==1.1.0
+whitenoise==6.8.2

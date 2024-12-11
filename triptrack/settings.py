@@ -26,7 +26,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['postgresql://eliska:6inhe4X8b1taiBmQkUqkcD0HKWH7wx42@dpg-ctctoa3tq21c7380iqsg-a.frankfurt-postgres.render.com/triptrack_database']
+ALLOWED_HOSTS = ['https://travel-journal-7s2w.onrender.com']
 
 
 # Application definition

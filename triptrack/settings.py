@@ -26,7 +26,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['postgresql://eliska:6inhe4X8b1taiBmQkUqkcD0HKWH7wx42@dpg-ctctoa3tq21c7380iqsg-a.frankfurt-postgres.render.com/triptrack_database']
 
 
 # Application definition
@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'triptrack.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgresql://eliska:6inhe4X8b1taiBmQkUqkcD0HKWH7wx42@dpg-ctctoa3tq21c7380iqsg-a/triptrack_database',
+        default='postgresql://eliska:6inhe4X8b1taiBmQkUqkcD0HKWH7wx42@dpg-ctctoa3tq21c7380iqsg-a.frankfurt-postgres.render.com/triptrack_database',
         conn_max_age=600
     )
 }

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
 from pathlib import Path
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-from secret_key import SECRET_KEY
+from .secret_key import secret_key
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -78,10 +79,10 @@ WSGI_APPLICATION = 'triptrack.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default='postgresql://eliska:6inhe4X8b1taiBmQkUqkcD0HKWH7wx42@dpg-ctctoa3tq21c7380iqsg-a/triptrack_database',
+        conn_max_age=600
+    )
 }
 
 

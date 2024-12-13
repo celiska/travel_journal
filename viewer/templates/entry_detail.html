@@ -16,7 +16,8 @@
                     <img src="{{ entry.author.profile.profile_picture.url }}" alt="Profile picture"
                          class="img-fluid rounded-circle profile_picture_small">
                 {% else %}
-                    <img src="/media/profile_default.jpg" alt="Default profile picture"
+                    <img src="https://triptrackbucket.s3.eu-north-1.amazonaws.com/media/profile_default.jpg"
+                         alt="Default profile picture"
                          class="img-fluid rounded-circle profile_picture_small">
                 {% endif %}
                 {{ entry.author.profile.display_name }}

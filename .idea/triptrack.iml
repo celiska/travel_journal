@@ -7,7 +7,7 @@
       <excludeFolder url="file://$MODULE_DIR$/.idea/shelf" />
       <excludeFolder url="file://$MODULE_DIR$/venv_old/.venv" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.12 (triptrack)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.12 (travel_journal)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>

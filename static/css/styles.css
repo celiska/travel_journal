@@ -1,5 +1,5 @@
 body {
-    background-image: url("/media/mountain.jpg");
+    background-image: url("https://triptrackbucket.s3.amazonaws.com/media/mountain.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     margin: 0;
